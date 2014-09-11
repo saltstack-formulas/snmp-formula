@@ -7,5 +7,8 @@
         'config': '/etc/snmpd.conf',
         'configtrap': '/etc/snmpdtrapd.conf',
         'options': '/etc/sysconfig/snmpd',
+        'source': 'salt://snmp/files/snmpd.conf',
+        'sourcetrap': 'salt://snmp/files/snmptrapd.conf',
+        'sourceoptions': 'salt://snmp/files/snmpd.options',
 },
 }, merge=salt['pillar.get']('snmp:lookup')) %}

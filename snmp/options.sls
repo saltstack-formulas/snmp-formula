@@ -6,5 +6,6 @@ snmp_conf:
     - managed
     - name: {{ snmp.options }}
     - template: jinja
+    - source: {{ snmp.sourceoptions }}
     - watch_in:
       - service: {{ snmp.service }}
