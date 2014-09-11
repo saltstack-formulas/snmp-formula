@@ -1,11 +1,11 @@
 {% set snmp  = salt['grains.filter_by']({
     'default': {
         'pkg': 'net-snmp',
-        'pkgutils': 'net-snmp-utils'
+        'pkgutils': 'net-snmp-utils',
         'service': 'snmpd',
         'servicetrap': 'snmptrapd',
-        'config': '/etc/snmpd.conf',
-        'configtrap': '/etc/snmpdtrapd.conf',
+        'config': '/etc/snmp/snmpd.conf',
+        'configtrap': '/etc/snmp/snmpdtrapd.conf',
         'options': '/etc/sysconfig/snmpd',
         'source': 'salt://snmp/files/snmpd.conf',
         'sourcetrap': 'salt://snmp/files/snmptrapd.conf',

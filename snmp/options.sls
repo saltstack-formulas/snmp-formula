@@ -1,7 +1,9 @@
+{% from "snmp/map.jinja" import snmp with context %}
+
 include:
   - snmp
 
-snmp_conf:
+snmp_options:
   file:
     - managed
     - name: {{ snmp.options }}
