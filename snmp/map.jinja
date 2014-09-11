@@ -1,0 +1,11 @@
+{% set snmp  = salt['grains.filter_by']({
+    'default': {
+        'pkg': 'net-snmp',
+        'pkgutils': 'net-snmp-utils'
+        'service': 'snmpd',
+        'servicetrap': 'snmptrapd',
+        'config': '/etc/snmpd.conf',
+        'configtrap': '/etc/snmpdtrapd.conf',
+        'options': '/etc/sysconfig/snmpd',
+},
+}, merge=salt['pillar.get']('snmp:lookup')) %}
