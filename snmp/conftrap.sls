@@ -1,3 +1,6 @@
+include:
+  - snmp
+
 snmptrap_conf:
   file:
     - managed
