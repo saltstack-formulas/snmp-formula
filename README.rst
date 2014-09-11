@@ -1,9 +1,8 @@
 ================
-template-formula
+snmp-formula
 ================
 
-A saltstack formula that is empty. It has dummy content to help with a quick
-start on a new formula.
+This formula installs the snmp daemon and utilities.
 
 .. note::
 
@@ -16,7 +15,27 @@ Available states
 .. contents::
     :local:
 
-``template``
+``snmp``
 ------------
 
-Installs the template package, and starts the associated template service.
+Installs the snmp daemon, starts, and enables the associated snmp service.
+
+``snmp.conf``
+------------
+
+Configures the snmp daemon.
+
+``snmp.trap``
+------------
+
+Starts and enables the trap service.
+
+``snmp.conftrap``
+------------
+
+Configures the trap service.
+
+``snmp.options``
+------------
+
+Sets snmp runtime options.
