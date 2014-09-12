@@ -1,3 +1,11 @@
-template:
-  lookup:
-    master: template-master
+snmp:
+  conf:
+    location: 'Unknown (add saltstack pillar)'
+    syscontact: 'Root <root@localhost> (add saltstack pillar)'
+    logconnects: false
+    rocommunities:
+      public:
+      - source: 192.168.1.0/24
+    rwcommunities:
+      private:
+      - source: 192.168.1.0/24
