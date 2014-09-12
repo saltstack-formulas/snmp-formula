@@ -1,0 +1,7 @@
+# snmptrapd command line options
+# OPTIONS="-Lsd -p /var/run/snmptrapd.pid"
+{% if salt['pillar.get']('snmp:optionstrap', '') %}
+OPTIONS={{ salt['pillar.get']('snmp:optionstrap', '') }}
+{% endif %}
+
+

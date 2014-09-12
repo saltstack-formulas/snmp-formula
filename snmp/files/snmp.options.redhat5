@@ -1,5 +1,5 @@
 # snmpd command line options
-# OPTIONS="-LS0-6d -Lf /dev/null -p /var/run/snmpd.pid"
+# # OPTIONS="-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a"
 {% if salt['pillar.get']('snmp:options', '') %}
 OPTIONS={{ salt['pillar.get']('snmp:options', '') }}
 {% endif %}

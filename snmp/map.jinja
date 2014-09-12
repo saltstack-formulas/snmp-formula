@@ -13,4 +13,15 @@
         'sourceoptions': 'salt://snmp/files/snmpd.options',
         'sourceoptionstrap': 'salt://snmp/files/snmptrapd.options',
     },
-}, merge=salt['pillar.get']('snmp:lookup')) %}
+    'Red Hat Enterprise Linux Server-6': {
+        'options': '/etc/sysconfig/snmpd',
+        'sourceoptions': 'salt://snmp/files/snmpd.options.redhat6',
+        'optionstrap': '/etc/sysconfig/snmptrapd',
+    },
+    'Red Hat Enterprise Linux Server-5': {
+        'options': '/etc/sysconfig/snmpd.options',
+        'sourceoptions': 'salt://snmp/files/snmpd.options.redhat5',
+        'optionstrap': '/etc/sysconfig/snmptrapd.options',
+    },
+},
+grain='osfinger', merge=salt['pillar.get']('snmp:lookup')) %}
