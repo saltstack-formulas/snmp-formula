@@ -9,5 +9,8 @@ snmp_conf:
     - name: {{ snmp.config }}
     - template: jinja
     - source: {{ snmp.source }}
+    - user: root
+    - group: root
+    - mode: 600
     - watch_in:
       - service: {{ snmp.service }}

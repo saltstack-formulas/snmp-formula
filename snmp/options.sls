@@ -9,5 +9,8 @@ snmp_options:
     - name: {{ snmp.options }}
     - template: jinja
     - source: {{ snmp.sourceoptions }}
+    - user: root
+    - group: root
+    - mode: 644
     - watch_in:
       - service: {{ snmp.service }}
