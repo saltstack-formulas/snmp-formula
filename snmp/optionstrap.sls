@@ -3,14 +3,14 @@
 include:
   - snmp
 
-snmptrap_conf:
+trap_options:
   file:
     - managed
-    - name: {{ snmp.configtrap }}
+    - name: {{ snmp.optionstrap }}
     - template: jinja
-    - source: {{ snmp.sourcetrap }}
+    - source: {{ snmp.sourceoptionstrap }}
     - user: root
     - group: root
-    - mode: 600
+    - mode: 644
     - watch_in:
-      - service: {{ snmp.servicetrap }}
+      - service: {{ snmp.service }}
