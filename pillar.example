@@ -5,9 +5,9 @@ snmp:
     logconnects: false
     rocommunities:
       public:
-        - source: 192.168.1.0/24
+        source: 192.168.1.0/24
     rwcommunities:
       private:
-        - source: 192.168.1.0/24
+        source: 192.168.1.0/24
     options: '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a'
     optionstrap: '-Lsd -p /var/run/snmptrapd.pid'
