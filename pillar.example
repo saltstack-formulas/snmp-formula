@@ -9,5 +9,13 @@ snmp:
     rwcommunities:
       private:
         source: 192.168.1.0/24
+    rousers:
+      - username: 'myv3user'
+        passphrase: 'myv3password'
+        view: '.1'
+    rwusers:
+      - username: 'myv3user_rw'
+        passphrase: 'myv3password'
+        view: '.1'
     options: '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a'
     optionstrap: '-Lsd -p /var/run/snmptrapd.pid'
