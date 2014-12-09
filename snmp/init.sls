@@ -3,8 +3,8 @@
 snmp:
   pkg:
     - installed
-    - name: {{ snmp.pkg }}
+    - name: {{ snmp.lookup.pkg }}
   service:
     - running
-    - name: {{ snmp.service }}
+    - name: {{ snmp.lookup.service }}
     - enable: true

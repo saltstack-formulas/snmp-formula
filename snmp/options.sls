@@ -6,11 +6,11 @@ include:
 snmp_options:
   file:
     - managed
-    - name: {{ snmp.options }}
+    - name: {{ snmp.lookup.options }}
     - template: jinja
-    - source: {{ snmp.sourceoptions }}
+    - source: {{ snmp.lookup.sourceoptions }}
     - user: root
     - group: root
     - mode: 644
     - watch_in:
-      - service: {{ snmp.service }}
+      - service: {{ snmp.lookup.service }}

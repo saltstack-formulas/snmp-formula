@@ -6,11 +6,11 @@ include:
 trap_options:
   file:
     - managed
-    - name: {{ snmp.optionstrap }}
+    - name: {{ snmp.lookup.optionstrap }}
     - template: jinja
-    - source: {{ snmp.sourceoptionstrap }}
+    - source: {{ snmp.lookup.sourceoptionstrap }}
     - user: root
     - group: root
     - mode: 644
     - watch_in:
-      - service: {{ snmp.servicetrap }}
+      - service: {{ snmp.lookup.servicetrap }}

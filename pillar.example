@@ -1,4 +1,8 @@
 snmp:
+  lookup:
+    options: '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a'
+    optionstrap: '-Lsd -p /var/run/snmptrapd.pid'
+
   conf:
     location: 'Unknown (add saltstack pillar)'
     syscontact: 'Root <root@localhost> (add saltstack pillar)'
@@ -17,5 +21,6 @@ snmp:
       - username: 'myv3user_rw'
         passphrase: 'myv3password'
         view: '.1'
-    options: '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a'
-    optionstrap: '-Lsd -p /var/run/snmptrapd.pid'
+    settings:
+      sysServices: 72
+      master: ['agentx']

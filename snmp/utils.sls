@@ -3,4 +3,4 @@
 snmp-utils:
   pkg:
     - installed
-    - name: {{ snmp.pkgutils }}
+    - name: {{ snmp.lookup.pkgutils }}
