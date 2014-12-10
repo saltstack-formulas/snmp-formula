@@ -8,3 +8,8 @@ snmp:
     - running
     - name: {{ snmp.lookup.service }}
     - enable: true
+
+{% if grains['os_family'] == 'Debian' %}
+include:
+  - snmp.default
+{% endif %}

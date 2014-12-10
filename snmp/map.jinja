@@ -13,6 +13,8 @@
             'sourcetrap': 'salt://snmp/files/snmptrapd.conf',
             'sourceoptions': 'salt://snmp/files/snmpd.options',
             'sourceoptionstrap': 'salt://snmp/files/snmptrapd.options',
+            'snmpdargs': '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a',
+            'trapdargs': '-Lsd -p /var/run/snmptrapd.pid',
         },
         'Debian': {
             'pkg': 'snmp',
@@ -21,12 +23,15 @@
             'servicetrap': 'snmptrapd',
             'config': '/etc/snmp/snmpd.conf',
             'configtrap': '/etc/snmp/snmptrapd.conf',
-            'options': '/etc/sysconfig/snmpd',
-            'optionstrap': '/etc/sysconfig/snmptrapd',
+            'configdefault': '/etc/default/snmpd',
             'source': 'salt://snmp/files/snmpd.conf',
             'sourcetrap': 'salt://snmp/files/snmptrapd.conf',
-            'sourceoptions': 'salt://snmp/files/snmpd.options',
-            'sourceoptionstrap': 'salt://snmp/files/snmptrapd.options',
+            'sourcedefault': 'salt://snmp/files/snmpd.default',
+            'snmpdargs': '-Lsd -Lf /dev/null -u snmp -g snmp -I -smux,mteTrigger,mteTriggerConf -p /var/run/snmpd.pid',
+            'trapdargs': '-Lsd -p /var/run/snmptrapd.pid',
+            'mibs': '',
+            'snmpdrun': 'yes',
+            'trapdrun': 'no',
         },
     }, default='RedHat', merge=salt['grains.filter_by']({
         'Red Hat Enterprise Linux Server-6': {
@@ -36,6 +41,5 @@
             'sourceoptions': 'salt://snmp/files/snmpd.options.redhat5',
         },
     }, grain='osfinger', merge=salt['pillar.get']('snmp:lookup'))),
-    'settings': salt['pillar.get']('snmp:conf:settings', {
-    }),
+    'settings': salt['pillar.get']('snmp:conf:settings', {}),
 } %}
