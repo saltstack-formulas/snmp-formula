@@ -3,10 +3,10 @@
 snmp:
   pkg:
     - installed
-    - name: {{ snmp.lookup.pkg }}
+    - name: {{ snmp.pkg }}
   service:
     - running
-    - name: {{ snmp.lookup.service }}
+    - name: {{ snmp.service }}
     - enable: true
 
 {% if grains['os_family'] == 'Debian' %}

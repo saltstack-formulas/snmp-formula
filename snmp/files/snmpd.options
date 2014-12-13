@@ -1,6 +1,6 @@
 # snmpd command line options
 # OPTIONS="-LS0-6d -Lf /dev/null -p /var/run/snmpd.pid"
 {%- from "snmp/map.jinja" import snmp with context %}
-{% if snmp.lookup.snmpdargs %}
-OPTIONS={{ snmp.lookup.snmpdargs }}
+{% if snmp.snmpdargs %}
+OPTIONS={{ snmp.snmpdargs }}
 {% endif %}

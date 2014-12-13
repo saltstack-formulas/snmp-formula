@@ -6,11 +6,11 @@ include:
 snmptrap_conf:
   file:
     - managed
-    - name: {{ snmp.lookup.configtrap }}
+    - name: {{ snmp.configtrap }}
     - template: jinja
-    - source: {{ snmp.lookup.sourcetrap }}
+    - source: {{ snmp.sourcetrap }}
     - user: root
     - group: root
     - mode: 644
     - watch_in:
-      - service: {{ snmp.lookup.servicetrap }}
+      - service: {{ snmp.servicetrap }}
