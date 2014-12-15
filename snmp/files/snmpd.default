@@ -1,0 +1,23 @@
+# {{ salt['pillar.get']('SALT_MANAGED') }}
+# Source: {{ source }}
+{%- from "snmp/map.jinja" import snmp with context %}
+
+# This file controls the activity of snmpd and snmptrapd
+
+# Don't load any MIBs by default. (MIBS='')
+# You might comment this lines once you have the MIBs downloaded.
+export MIBS={{ snmp.mibs }}
+
+# snmpd control (yes means start daemon).
+SNMPDRUN={{ snmp.snmpdrun }}
+
+# snmpd options (use syslog, close stdin/out/err).
+SNMPDOPTS='{{ snmp.snmpdargs }}'
+
+# snmptrapd control (yes means start daemon).  As of net-snmp version
+# 5.0, master agentx support must be enabled in snmpd before snmptrapd
+# can be run.  See snmpd.conf(5) for how to do this.
+TRAPDRUN={{ snmp.trapdrun }}
+
+# snmptrapd options (use syslog).
+TRAPDOPTS='{{ snmp.trapdargs }}'

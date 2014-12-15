@@ -3,14 +3,12 @@
 include:
   - snmp
 
-snmp_conf:
+default_snmpd:
   file:
     - managed
-    - name: {{ snmp.config }}
+    - name: {{ snmp.configdefault }}
     - template: jinja
-    - context:
-      config: {{ salt['pillar.get']('snmp:conf:settings', {}) }}
-    - source: {{ snmp.source }}
+    - source: {{ snmp.sourcedefault }}
     - user: root
     - group: root
     - mode: 644

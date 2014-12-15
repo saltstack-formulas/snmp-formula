@@ -1,11 +1,16 @@
 snmp:
+  # lookup:
+  #   snmpdargs: '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a'
+  #   trapdargs: '-Lsd -p /var/run/snmptrapd.pid'
+  #   trapdrun: 'no'	# Needs "'", otherwise it'll be a bool
+
   conf:
     location: 'Unknown (add saltstack pillar)'
     syscontact: 'Root <root@localhost> (add saltstack pillar)'
     logconnects: false
     rocommunities:
       public:
-        source: 192.168.1.0/24
+        source: [localhost, 192.168.0.0/24, 192.168.1.0/24]
     rwcommunities:
       private:
         source: 192.168.1.0/24
@@ -17,5 +22,7 @@ snmp:
       - username: 'myv3user_rw'
         passphrase: 'myv3password'
         view: '.1'
-    options: '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a'
-    optionstrap: '-Lsd -p /var/run/snmptrapd.pid'
+    settings:
+      # agentAddress: 'udp:161,udp6:[::1]:161'
+      sysServices: 72
+      master: ['agentx']
