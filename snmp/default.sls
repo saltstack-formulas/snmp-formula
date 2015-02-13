@@ -4,8 +4,7 @@ include:
   - snmp
 
 default_snmpd:
-  file:
-    - managed
+  file.managed:
     - name: {{ snmp.configdefault }}
     - template: jinja
     - source: {{ snmp.sourcedefault }}

@@ -1,13 +1,13 @@
 {% from "snmp/map.jinja" import snmp with context %}
 
 snmp:
-  pkg:
-    - installed
+  pkg.installed:
     - name: {{ snmp.pkg }}
-  service:
-    - running
+  service.running:
     - name: {{ snmp.service }}
     - enable: true
+    - require:
+      - pkg: {{ snmp.pkg }}
 
 {% if grains['os_family'] == 'Debian' %}
 include:
