@@ -4,8 +4,7 @@ include:
   - snmp
 
 trap_options:
-  file:
-    - managed
+  file.managed:
     - name: {{ snmp.optionstrap }}
     - template: jinja
     - source: {{ snmp.sourceoptionstrap }}

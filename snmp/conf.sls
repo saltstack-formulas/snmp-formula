@@ -4,8 +4,7 @@ include:
   - snmp
 
 snmp_conf:
-  file:
-    - managed
+  file.managed:
     - name: {{ snmp.config }}
     - template: jinja
     - context:

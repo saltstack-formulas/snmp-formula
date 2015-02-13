@@ -4,7 +4,6 @@ include:
   - snmp
 
 trap:
-  service:
-    - running
+  service.running:
     - name: {{ snmp.servicetrap }}
     - enable: true
