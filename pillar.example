@@ -18,10 +18,14 @@ snmp:
       - username: 'myv3user'
         passphrase: 'myv3password'
         view: '.1'
+        # authproto: 'SHA'
+        # privproto: 'AES'
     rwusers:
       - username: 'myv3user_rw'
         passphrase: 'myv3password'
         view: '.1'
+        # authproto: 'SHA'
+        # privproto: 'AES'
     settings:
       # agentAddress: 'udp:161,udp6:[::1]:161'
       sysServices: 72
