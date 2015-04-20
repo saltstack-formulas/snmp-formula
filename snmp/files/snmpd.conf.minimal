@@ -46,17 +46,17 @@ rwcommunity	{{ rwcommunity }}	{{ source }}
 {%- endfor %}
 
 # Version 3 users (read only)
-{% for user in salt['pillar.get']('snmp:conf:rousers', '') %}
+{%- for user in salt['pillar.get']('snmp:conf:rousers', '') -%}
 rouser {{ user.username }} auth -V {{ user.username }}_view
 createUser {{ user.username }} {{ user.get('authproto', 'MD5') }} {{ user.passphrase }} {{ user.get('privproto', 'AES') }}
 view {{ user.username }}_view included {{ user.view }}
-{%- endfor %}
+{%- endfor -%}
 # Version 3 users (read/write)
-{% for user in salt['pillar.get']('snmp:conf:rwusers', '') %}
+{%- for user in salt['pillar.get']('snmp:conf:rwusers', '') -%}
 rwuser {{ user.username }} auth -V {{ user.username }}_view
 createUser {{ user.username }} {{ user.get('authproto', 'MD5') }} {{ user.passphrase }} {{ user.get('privproto', 'AES') }}
 view {{ user.username }}_view included {{ user.view }}
-{%- endfor %}
+{%- endfor -%}
 
 # Extra settings
 {% for declaration, values in config.items() %}
