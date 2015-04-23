@@ -1,5 +1,9 @@
 # {{ salt['pillar.get']('SALT_MANAGED') }}
-# Source: {{ source }}
+#
+# DO NOT EDIT
+#
+# This file is managed by Salt via {{ source }}
+# Modify the config that generates this file instead
 #
 #
 # snmpd.conf:

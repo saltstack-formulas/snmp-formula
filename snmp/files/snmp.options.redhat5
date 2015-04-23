@@ -1,3 +1,10 @@
+# {{ salt['pillar.get']('SALT_MANAGED') }}
+#
+# DO NOT EDIT
+#
+# This file is managed by Salt via {{ source }}
+# Modify the config that generates this file instead
+#
 # snmpd command line options
 # # OPTIONS="-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a"
 {% if salt['pillar.get']('snmp:options', '') %}

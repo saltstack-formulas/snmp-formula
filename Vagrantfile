@@ -21,5 +21,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Set up salt-master and minion
-  config.vm.provision "shell", path: "dev/setup-salt.sh"
+  config.vm.provision "shell", path: "vagrant/setup-salt.sh"
 end
