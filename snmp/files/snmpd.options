@@ -1,3 +1,10 @@
+# {{ salt['pillar.get']('SALT_MANAGED') }}
+#
+# DO NOT EDIT
+#
+# This file is managed by Salt via {{ source }}
+# Modify the config that generates this file instead
+#
 # snmpd command line options
 # OPTIONS="-LS0-6d -Lf /dev/null -p /var/run/snmpd.pid"
 {%- from "snmp/map.jinja" import snmp with context %}
