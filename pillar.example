@@ -8,24 +8,79 @@ snmp:
     location: 'Unknown (add saltstack pillar)'
     syscontact: 'Root <root@localhost> (add saltstack pillar)'
     logconnects: false
+    # vacm com2sec's (map communities into security names)
+    #com2sec:
+    #  - name: local
+    #    source: localhost
+    #    community: localhost
+    # vacm group's (map security names to group names)
+    #groups:
+    #  - name: ROgroup1
+    #    version: usm
+    #    secname: local
+    #  - name: ROgroup1
+    #    version: v1
+    #    secname: local
+    #  - name: ROgroup1
+    #    version: v2c
+    #    secname: local
+    #  - name: Other
+    #    version: usm
+    #    secname: local
+    #  - name: Other
+    #    version: v1
+    #    secname: local
+    #  - name: Other
+    #    version: v2c
+    #    secname: local
+    # vacm views (map mib trees to views)
+    views:
+      - name: all
+        type: included
+        oid: '.1'
+        #optional mask
+        mask: 80
+    # vacm access (map groups to views with access restrictions)
+    #access:
+    #  - name: ROgroup1
+    #    context: '""'
+    #    match: any
+    #    level: noauth
+    #    prefix: exact
+    #    read: all
+    #    write: none
+    #    notify: none
+    #  - name: Other
+    #    context: "cont"
+    #    match: any
+    #    level: noauth
+    #    prefix: exact
+    #    read: all
+    #    write: none
+    #    notify: none
+    # v1/2c read-only communities
     rocommunities:
       public:
         source: [localhost, 192.168.0.0/24, 192.168.1.0/24]
+    # v1/2c read-write communities
     rwcommunities:
       private:
         source: 192.168.1.0/24
+    # v3 users for read-only
     rousers:
       - username: 'myv3user'
         passphrase: 'myv3password'
-        view: '.1'
+        view: all
         # authproto: 'SHA'
         # privproto: 'AES'
+    # v3 users for read-write
     rwusers:
       - username: 'myv3user_rw'
         passphrase: 'myv3password'
-        view: '.1'
+        view: all
         # authproto: 'SHA'
         # privproto: 'AES'
+    # misc snmpd.conf settings
     settings:
       # agentAddress: 'udp:161,udp6:[::1]:161'
       sysServices: 72

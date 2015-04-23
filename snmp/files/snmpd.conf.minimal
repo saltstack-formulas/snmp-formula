@@ -6,6 +6,9 @@
 #   An configuration file for net-snmp snmpd agent.
 #
 
+##############################################################################
+# System contact information
+#
 sysLocation "{{ salt['pillar.get']('snmp:conf:location', 'Unknown (add saltstack pillar)') }}"
 sysContact "{{ salt['pillar.get']('snmp:conf:syscontact', 'Root <root@localhost> (add saltstack pillar)') }}"
 
@@ -17,9 +20,64 @@ dontLogTCPWrappersConnects yes
 {%- endif %}
 {% endif %}
 
+###############################################################################
+# Access Control
+###############################################################################
+
+####
+# First, map the community name "public" into a "security name"
+
+#       sec.name  source          community
+{# if provided with com2sec entries -#}
+{% if salt['pillar.get']('snmp:conf:com2sec', False) -%}
+{% for entry in salt['pillar.get']('snmp:conf:com2sec', '') -%}
+com2sec {{ entry.name }} {{ entry.source }} {{ entry.community }}
+{% endfor -%}
+{% else -%}
+com2sec notConfigUser  default       public
+{% endif %}
+
+####
+# Second, map the security name into a group name:
+
+#       groupName      securityModel securityName
+{# if provided with group entries -#}
+{% if salt['pillar.get']('snmp:conf:groups', False) -%}
+{% for entry in salt['pillar.get']('snmp:conf:groups', '') -%}
+group {{ entry.name }} {{ entry.version }} {{ entry.secname }}
+{% endfor -%}
+{% else -%}
+group   notConfigGroup v1           notConfigUser
+group   notConfigGroup v2c           notConfigUser
+{% endif %}
+
+####
+# Third, create a view for us to let the group and/or a v3 user have rights to:
+
+# Make at least  snmpwalk -v 1 localhost -c public system fast again.
 #       name           incl/excl     subtree         mask(optional)
+{# if provided with view entries -#}
+{% if salt['pillar.get']('snmp:conf:views', False) -%}
+{% for entry in salt['pillar.get']('snmp:conf:views', '') -%}
+view {{ entry.name }} {{ entry.type }} {{ entry.oid }} {{ entry.mask if entry.mask }}
+{% endfor -%}
+{% else -%}
 view    systemview    included   .1.3.6.1.2.1.1
 view    systemview    included   .1.3.6.1.2.1.25.1.1
+{% endif %}
+
+####
+# Finally, grant the group read-only access to the systemview view.
+
+#       group          context sec.model sec.level prefix read   write  notif
+{# if provided with access entries -#}
+{% if salt['pillar.get']('snmp:conf:access', False) -%}
+{% for entry in salt['pillar.get']('snmp:conf:access', '') -%}
+access {{ entry.name }} {{ entry.context }} {{ entry.match }} {{ entry.level }} {{ entry.prefix }} {{ entry.read }} {{ entry.write }} {{ entry.notify }}
+{% endfor -%}
+{% else -%}
+access  notConfigGroup ""      any       noauth    exact  systemview none none
+{% endif %}
 
 # Version 1/2c users (read only)
 {%- for rocommunity in salt['pillar.get']('snmp:conf:rocommunities', '') %}
@@ -47,15 +105,14 @@ rwcommunity	{{ rwcommunity }}	{{ source }}
 
 # Version 3 users (read only)
 {%- for user in salt['pillar.get']('snmp:conf:rousers', '') %}
-rouser {{ user.username }} auth -V {{ user.username }}_view
+rouser {{ user.username }} auth -V {{ user.view }}
 createUser {{ user.username }} {{ user.get('authproto', 'MD5') }} {{ user.passphrase }} {{ user.get('privproto', 'AES') }}
-view {{ user.username }}_view included {{ user.view }}
 {%- endfor %}
+
 # Version 3 users (read/write)
 {%- for user in salt['pillar.get']('snmp:conf:rwusers', '') %}
-rwuser {{ user.username }} auth -V {{ user.username }}_view
+rwuser {{ user.username }} auth -V {{ user.view }}
 createUser {{ user.username }} {{ user.get('authproto', 'MD5') }} {{ user.passphrase }} {{ user.get('privproto', 'AES') }}
-view {{ user.username }}_view included {{ user.view }}
 {%- endfor %}
 
 # Extra settings
