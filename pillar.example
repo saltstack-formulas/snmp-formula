@@ -2,7 +2,7 @@ snmp:
   # lookup:
   #   snmpdargs: '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a'
   #   trapdargs: '-Lsd -p /var/run/snmptrapd.pid'
-  #   trapdrun: 'no'	# Needs "'", otherwise it'll be a bool
+  #   trapdrun: 'no' # Needs "'", otherwise it'll be a bool
 
   conf:
     location: 'Unknown (add saltstack pillar)'
