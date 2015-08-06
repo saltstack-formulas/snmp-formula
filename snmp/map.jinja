@@ -5,8 +5,11 @@ service: snmpd
 servicetrap: snmptrapd
 config: /etc/snmp/snmpd.conf
 configtrap: /etc/snmp/snmptrapd.conf
+configagent: /etc/snmp/snmp.conf
+mibsdir: /usr/share/snmp/mibs
 source: salt://snmp/files/snmpd.conf
 sourcetrap: salt://snmp/files/snmptrapd.conf
+sourceagent: salt://snmp/files/snmp.conf
 trapdargs: -Lsd -p /var/run/snmptrapd.pid
 {% endload %}
 
