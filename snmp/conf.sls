@@ -1,4 +1,5 @@
 {% from "snmp/map.jinja" import snmp with context %}
+{% from "snmp/conf.jinja" import conf with context -%}
 
 include:
   - snmp
@@ -8,7 +9,7 @@ snmp_conf:
     - name: {{ snmp.config }}
     - template: jinja
     - context:
-      config: {{ salt['pillar.get']('snmp:conf:settings', {}) }}
+      config: {{ conf.get('settings', {}) }}
     - source: {{ snmp.source }}
     - user: root
     - group: root
