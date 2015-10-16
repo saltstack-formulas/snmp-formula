@@ -66,10 +66,10 @@ access {{ entry.name }} {{ entry.context }} {{ entry.match }} {{ entry.level }} 
 {%- set source = salt['pillar.get']('snmp:conf:rocommunities:'+ rocommunity +':source', '') %}
 {%- if source.__class__ in (().__class__, [].__class__) %}
 {%- for src in source %}
-rocommunity	{{ rocommunity }}	{{ src}}
+rocommunity {{ rocommunity }} {{ src}}
 {%- endfor %}
 {%- else %}
-rocommunity	{{ rocommunity }}	{{ source }}
+rocommunity {{ rocommunity }} {{ source }}
 {%- endif %}
 {%- endfor %}
 
@@ -78,10 +78,10 @@ rocommunity	{{ rocommunity }}	{{ source }}
 {%- set source = salt['pillar.get']('snmp:conf:rwcommunities:'+ rwcommunity +':source', '') %}
 {%- if source.__class__ in (().__class__, [].__class__) %}
 {%- for src in source %}
-rwcommunity	{{ rwcommunity }}	{{ src}}
+rwcommunity {{ rwcommunity }} {{ src}}
 {%- endfor %}
 {%- else %}
-rwcommunity	{{ rwcommunity }}	{{ source }}
+rwcommunity {{ rwcommunity }} {{ source }}
 {%- endif %}
 {%- endfor %}
 
