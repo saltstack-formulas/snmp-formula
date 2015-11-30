@@ -8,6 +8,7 @@ snmp:
     location: 'Unknown (add saltstack pillar)'
     syscontact: 'Root <root@localhost> (add saltstack pillar)'
     logconnects: false
+    # disk: /
     # vacm com2sec's (map communities into security names)
     #com2sec:
     #  - name: local
