@@ -62,6 +62,9 @@ snmp:
     rocommunities:
       public:
         source: [localhost, 192.168.0.0/24, 192.168.1.0/24]
+    #rocommunities6:
+    #  public:
+    #    source: 2001:DB8::1
     # v1/2c read-write communities
     rwcommunities:
       private:
