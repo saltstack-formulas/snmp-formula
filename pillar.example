@@ -88,3 +88,9 @@ snmp:
     # custom MIB files
     # mibs:
     #     <MIB name>: salt://<path to MIB.txt>
+    extend:
+      - name: 'HTTPD_PIDS'
+        prog: '/bin/sh /path/to/check_apache.sh'
+    dlmod:
+      - name: 'nstAgentPluginObject'
+        sharedobject: '/path/to/nstAgentPluginObject.so'
