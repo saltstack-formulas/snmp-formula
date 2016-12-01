@@ -31,6 +31,12 @@ Debian:
     mibs:
     snmpdrun: "yes"
     trapdrun: "no"
+Suse:
+    pkg: net-snmp
+    pkgutils: net-snmp
+    options: /etc/sysconfig/net-snmp
+    sourceoptions: salt://snmp/files/snmpd.options.suse
+    sourceoptionstrap: salt://snmp/files/snmptrapd.options.suse
 {% endload %}
 
 {% load_yaml as rhel_specific %}
