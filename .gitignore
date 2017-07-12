@@ -1,3 +1,5 @@
-.vagrant/
 .idea/
 top.sls
+*.swp
+.kitchen/
+.kitchen.local.yml
