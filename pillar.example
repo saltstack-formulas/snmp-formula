@@ -69,17 +69,19 @@ snmp:
     # v3 users for read-only
     rousers:
       - username: 'myv3user'
-        passphrase: 'myv3password'
+        authpassphrase: 'myv3password'
         view: all
         # authproto: 'SHA'
         # privproto: 'AES'
+        # privpassphrase: 'v3privpass'
     # v3 users for read-write
     rwusers:
       - username: 'myv3user_rw'
-        passphrase: 'myv3password'
+        authpassphrase: 'myv3password'
         view: all
         # authproto: 'SHA'
         # privproto: 'AES'
+        # privpassphrase: 'v3privpass'
     # misc snmpd.conf settings
     settings:
       # agentAddress: 'udp:161,udp6:[::1]:161'
