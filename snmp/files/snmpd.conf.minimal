@@ -1,3 +1,6 @@
+{% from "snmp/conf.jinja" import conf with context -%}
+{% from "snmp/macros.jinja" import v12c_communities with context -%}
+
 # {{ salt['pillar.get']('SALT_MANAGED') }}
 #
 # DO NOT EDIT
@@ -13,11 +16,11 @@
 ##############################################################################
 # System contact information
 #
-sysLocation "{{ salt['pillar.get']('snmp:conf:location', 'Unknown (add saltstack pillar)') }}"
-sysContact "{{ salt['pillar.get']('snmp:conf:syscontact', 'Root <root@localhost> (add saltstack pillar)') }}"
+sysLocation "{{ conf.get('location', 'Unknown (add saltstack pillar)') }}"
+sysContact "{{ conf.get('syscontact', 'Root <root@localhost> (add saltstack pillar)') }}"
 
-{% if salt['pillar.get']('snmp:conf:logconnects') is not none %}
-{%- if salt['pillar.get']('snmp:conf:logconnects') %}
+{% if conf.get('logconnects') is not none %}
+{%- if conf.get('logconnects') %}
 # dontLogTCPWrappersConnects yes
 {%- else %}
 dontLogTCPWrappersConnects yes
@@ -32,7 +35,7 @@ dontLogTCPWrappersConnects yes
 # First, map the community name "public" into a "security name"
 
 #       sec.name  source          community
-{%- for entry in salt['pillar.get']('snmp:conf:com2sec', '') %}
+{%- for entry in conf.get('com2sec', '') %}
 com2sec {{ entry.name }} {{ entry.source }} {{ entry.community }}
 {%- endfor %}
 
@@ -40,7 +43,7 @@ com2sec {{ entry.name }} {{ entry.source }} {{ entry.community }}
 # Second, map the security name into a group name:
 
 #       groupName      securityModel securityName
-{%- for entry in salt['pillar.get']('snmp:conf:groups', '') %}
+{%- for entry in conf.get('groups', '') %}
 group {{ entry.name }} {{ entry.version }} {{ entry.secname }}
 {% endfor %}
 
@@ -49,7 +52,7 @@ group {{ entry.name }} {{ entry.version }} {{ entry.secname }}
 
 # Make at least  snmpwalk -v 1 localhost -c public system fast again.
 #       name           incl/excl     subtree         mask(optional)
-{%- for entry in salt['pillar.get']('snmp:conf:views', '') %}
+{%- for entry in conf.get('views', []) %}
 view {{ entry.name }} {{ entry.type }} {{ entry.oid }} {{ entry.mask if entry.mask }}
 {%- endfor %}
 
@@ -57,42 +60,23 @@ view {{ entry.name }} {{ entry.type }} {{ entry.oid }} {{ entry.mask if entry.ma
 # Finally, grant the group read-only access to the systemview view.
 
 #       group          context sec.model sec.level prefix read   write  notif
-{%- for entry in salt['pillar.get']('snmp:conf:access', '') %}
+{%- for entry in conf.get('access', []) %}
 access {{ entry.name }} {{ entry.context }} {{ entry.match }} {{ entry.level }} {{ entry.prefix }} {{ entry.read }} {{ entry.write }} {{ entry.notify }}
 {%- endfor %}
 
 # Version 1/2c users (read only)
-{%- for rocommunity in salt['pillar.get']('snmp:conf:rocommunities', '') %}
-{%- set source = salt['pillar.get']('snmp:conf:rocommunities:'+ rocommunity +':source', '') %}
-{%- if source.__class__ in (().__class__, [].__class__) %}
-{%- for src in source %}
-rocommunity {{ rocommunity }} {{ src}}
-{%- endfor %}
-{%- else %}
-rocommunity {{ rocommunity }} {{ source }}
-{%- endif %}
-{%- endfor %}
-
+{{ v12c_communities('ro') }}
 # Version 1/2c users (read/write)
-{%- for rwcommunity in salt['pillar.get']('snmp:conf:rwcommunities', '') %}
-{%- set source = salt['pillar.get']('snmp:conf:rwcommunities:'+ rwcommunity +':source', '') %}
-{%- if source.__class__ in (().__class__, [].__class__) %}
-{%- for src in source %}
-rwcommunity {{ rwcommunity }} {{ src}}
-{%- endfor %}
-{%- else %}
-rwcommunity {{ rwcommunity }} {{ source }}
-{%- endif %}
-{%- endfor %}
+{{ v12c_communities('rw') }}
 
 # Version 3 users (read only)
-{%- for user in salt['pillar.get']('snmp:conf:rousers', '') %}
+{%- for user in conf.get('rousers', []) %}
 rouser {{ user.username }} auth -V {{ user.view }}
 createUser {{ user.username }} {{ user.get('authproto', 'MD5') }} {{ user.passphrase }} {{ user.get('privproto', 'AES') }}
 {%- endfor %}
 
 # Version 3 users (read/write)
-{%- for user in salt['pillar.get']('snmp:conf:rwusers', '') %}
+{%- for user in conf.get('rwusers', []) %}
 rwuser {{ user.username }} auth -V {{ user.view }}
 createUser {{ user.username }} {{ user.get('authproto', 'MD5') }} {{ user.passphrase }} {{ user.get('privproto', 'AES') }}
 {%- endfor %}

@@ -1,9 +1,10 @@
 {% from "snmp/map.jinja" import snmp with context %}
+{% from "snmp/conf.jinja" import conf with context -%}
 
 include:
   - snmp
 
-{% for name, source in salt['pillar.get']("snmp:conf:mibs").items() %}
+{% for name, source in conf.get("mibs", {}).items() %}
 {% if source %}
 snmp_mib_{{ name }}:
   file.managed:
