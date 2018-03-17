@@ -62,6 +62,10 @@ snmp:
     rocommunities:
       public:
         source: [localhost, 192.168.0.0/24, 192.168.1.0/24]
+      withoutsource:
+    # or
+    rocommunities:
+      - public
     # v1/2c read-write communities
     rwcommunities:
       private:
