@@ -1,4 +1,5 @@
 {% from "snmp/conf.jinja" import conf with context -%}
+{% from "snmp/macros.jinja" import v12c_communities with context -%}
 
 # {{ salt['pillar.get']('SALT_MANAGED') }}
 #
@@ -64,28 +65,9 @@ access {{ entry.name }} {{ entry.context }} {{ entry.match }} {{ entry.level }} 
 {%- endfor %}
 
 # Version 1/2c users (read only)
-{%- for rocommunity in conf.get('rocommunities', []) %}
-{%- set source = rocommunity.get('source', []) %}
-{%- if source.__class__ in (().__class__, [].__class__) %}
-{%- for src in source %}
-rocommunity {{ rocommunity }} {{ src}}
-{%- endfor %}
-{%- else %}
-rocommunity {{ rocommunity }} {{ source }}
-{%- endif %}
-{%- endfor %}
-
+{{ v12c_communities('ro') }}
 # Version 1/2c users (read/write)
-{%- for rwcommunity in conf.get('rwcommunities', []) %}
-{%- set source = rwcommunity.get('source', []) %}
-{%- if source.__class__ in (().__class__, [].__class__) %}
-{%- for src in source %}
-rwcommunity {{ rwcommunity }} {{ src}}
-{%- endfor %}
-{%- else %}
-rwcommunity {{ rwcommunity }} {{ source }}
-{%- endif %}
-{%- endfor %}
+{{ v12c_communities('rw') }}
 
 # Version 3 users (read only)
 {%- for user in conf.get('rousers', []) %}
