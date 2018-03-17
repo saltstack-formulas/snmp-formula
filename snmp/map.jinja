@@ -31,6 +31,14 @@ Debian:
     mibs:
     snmpdrun: "yes"
     trapdrun: "no"
+Gentoo:
+    pkg: net-analyzer/net-snmp
+    configdefault: /etc/conf.d/snmpd
+    sourcedefault: salt://snmp/files/snmpd.confd
+    snmpdargs: -I -smux
+    mibs:
+    snmpdrun: "yes"
+    trapdrun: "no"
 {% endload %}
 
 {% load_yaml as rhel_specific %}
