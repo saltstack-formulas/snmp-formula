@@ -10,6 +10,8 @@ snmp:
     logconnects: false
     # disk checks
     #disk: /
+    #disks:
+    #  - /
     # vacm com2sec's (map communities into security names)
     #com2sec:
     #  - name: local
