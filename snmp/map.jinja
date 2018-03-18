@@ -11,6 +11,7 @@ source: salt://snmp/files/snmpd.conf
 sourcetrap: salt://snmp/files/snmptrapd.conf
 sourceagent: salt://snmp/files/snmp.conf
 trapdargs: -Lsd -p /var/run/snmptrapd.pid
+rootgroup: root
 {% endload %}
 
 {% load_yaml as platform_specific %}
@@ -44,6 +45,11 @@ Gentoo:
     mibs:
     snmpdrun: "yes"
     trapdrun: "no"
+FreeBSD:
+    config: /usr/local/etc/snmp/snmpd.conf
+    pkg: net-snmp
+    pkgutils: net-snmp
+    rootgroup: wheel
 {% endload %}
 
 {% load_yaml as rhel_specific %}
