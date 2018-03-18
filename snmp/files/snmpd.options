@@ -6,8 +6,7 @@
 # Modify the config that generates this file instead
 #
 # snmpd command line options
-# OPTIONS="-LS0-6d -Lf /dev/null -p /var/run/snmpd.pid"
 {%- from "snmp/map.jinja" import snmp with context %}
-{% if snmp.snmpdargs %}
+{%- if snmp.snmpdargs %}
 OPTIONS={{ snmp.snmpdargs }}
-{% endif %}
+{%- endif %}
