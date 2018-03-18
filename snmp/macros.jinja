@@ -6,14 +6,16 @@
   {%- for community in communities %}
     {%- if communities.__class__ == {}.__class__ and communities.get(community, {}) is  mapping %}
       {%- set source = communities.get(community).get('source', '') %}
+      {%- set view = communities.get(community).get('view', None) %}
     {%- else %}
       {%- set source = '' %}
+      {%- set view = '' %}
     {%- endif %}
     {%- if not source.__class__ in (().__class__, [].__class__) %}
       {%- set source = [source] %}
     {%- endif %}
     {%- for src in source -%}
-{{ mode }}community     {{ community }}       {{ src }}
+{{ mode }}community     {{ community }}       {{ src }}{{' -V ' + view if view else ''}}
 {%      endfor %}
   {%- endfor -%}
 {% endmacro-%}
