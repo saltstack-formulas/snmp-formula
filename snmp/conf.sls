@@ -12,7 +12,7 @@ snmp_conf:
       config: {{ conf.get('settings', {}) }}
     - source: {{ snmp.source }}
     - user: root
-    - group: root
+    - group: {{ snmp.rootgroup }}
     - mode: 644
     - watch_in:
       - service: {{ snmp.service }}
