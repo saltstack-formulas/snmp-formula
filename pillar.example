@@ -8,6 +8,10 @@ snmp:
     location: 'Unknown (add saltstack pillar)'
     syscontact: 'Root <root@localhost> (add saltstack pillar)'
     logconnects: false
+    # disk checks
+    #disk: /
+    #disks:
+    #  - /
     # vacm com2sec's (map communities into security names)
     #com2sec:
     #  - name: local
@@ -62,6 +66,13 @@ snmp:
     rocommunities:
       public:
         source: [localhost, 192.168.0.0/24, 192.168.1.0/24]
+      withoutsource:
+    # or
+    rocommunities:
+      - public
+    #rocommunities6:
+    #  public:
+    #    source: 2001:DB8::1
     # v1/2c read-write communities
     rwcommunities:
       private:
@@ -88,3 +99,9 @@ snmp:
     # custom MIB files
     # mibs:
     #     <MIB name>: salt://<path to MIB.txt>
+    extend:
+      - name: 'HTTPD_PIDS'
+        prog: '/bin/sh /path/to/check_apache.sh'
+    dlmod:
+      - name: 'nstAgentPluginObject'
+        sharedobject: '/path/to/nstAgentPluginObject.so'
