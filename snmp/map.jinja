@@ -21,7 +21,6 @@ RedHat:
     optionstrap: /etc/sysconfig/snmptrapd
     sourceoptions: salt://snmp/files/snmpd.options
     sourceoptionstrap: salt://snmp/files/snmptrapd.options
-    snmpdargs: -Lsd -Lf /dev/null -p /var/run/snmpd.pid -a
 Debian:
     pkg: snmpd
     pkgutils: snmp
@@ -42,15 +41,17 @@ Gentoo:
 {% endload %}
 
 {% load_yaml as rhel_specific %}
-Red Hat Enterprise Linux Server-6:
-    sourceoptions: salt://snmp/files/snmpd.options.redhat6
-Red Hat Enterprise Linux Server-5:
-    sourceoptions: salt://snmp/files/snmpd.options.redhat5
+'7':
+    snmpdargs: '-LS0-6d'
+'6':
+    snmpdargs: '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a'
+'5':
+    snmpdargs: '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a'
 {% endload %}
 
 {% set platform_addition = salt['grains.filter_by'](platform_specific, default='RedHat') %}
-{% set rhel_addition = salt['grains.filter_by'](rhel_specific, grain='osfinger') %}
-{% set user_override = salt['pillar.get']('snmp:lookup', {}) %}
+{% set rhel_addition = salt['grains.filter_by'](rhel_specific, grain='osmajorrelease', default='default') %}
+{% set user_override = salt['pillar.get']('snmp', {}) %}
 
 {% do snmp.update(platform_addition) %}
 
