@@ -70,6 +70,9 @@ snmp:
     # or
     rocommunities:
       - public
+    #rocommunities6:
+    #  public:
+    #    source: 2001:DB8::1
     # v1/2c read-write communities
     rwcommunities:
       private:

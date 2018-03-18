@@ -1,8 +1,8 @@
 {% from "snmp/conf.jinja" import conf with context -%}
 
 {# mode can be either 'ro' or 'rw' #}
-{%- macro v12c_communities(mode) -%}
-  {% set communities = conf.get(mode+'communities', []) -%}
+{%- macro v12c_communities(mode, proto='') -%}
+  {% set communities = conf.get(mode+'communities'+proto, []) -%}
   {%- for community in communities %}
     {%- if communities.__class__ == {}.__class__ and communities.get(community, {}) is  mapping %}
       {%- set source = communities.get(community).get('source', '') %}
