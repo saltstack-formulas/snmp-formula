@@ -11,18 +11,18 @@
 
 # Don't load any MIBs by default. (MIBS='')
 # You might comment this lines once you have the MIBs downloaded.
-export MIBS={{ snmp.mibs }}
+export MIBS={% if snmp.mibs is not none %}{{ snmp.mibs }}{% endif %}
 
 # snmpd control (yes means start daemon).
-SNMPDRUN={{ snmp.snmpdrun }}
+SNMPDRUN={% if snmp.snmpdrun is not none %}{{ snmp.snmpdrun }}{% endif %}
 
 # snmpd options (use syslog, close stdin/out/err).
-SNMPDOPTS='{{ snmp.snmpdargs }}'
+SNMPDOPTS='{% if snmp.snmpdargs is not none %}{{ snmp.snmpdargs }}{% endif %}'
 
 # snmptrapd control (yes means start daemon).  As of net-snmp version
 # 5.0, master agentx support must be enabled in snmpd before snmptrapd
 # can be run.  See snmpd.conf(5) for how to do this.
-TRAPDRUN={{ snmp.trapdrun }}
+TRAPDRUN={% if snmp.trapdrun is not none %}{{ snmp.trapdrun }}{% endif %}
 
 # snmptrapd options (use syslog).
-TRAPDOPTS='{{ snmp.trapdargs }}'
+TRAPDOPTS='{% if snmp.trapdargs is not none %}{{ snmp.trapdargs }}{% endif %}'
