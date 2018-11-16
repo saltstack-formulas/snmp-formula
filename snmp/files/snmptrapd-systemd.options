@@ -1,0 +1,14 @@
+# DO NOT EDIT
+#
+# This file is managed by Salt via {{ source }}
+# Modify the config that generates this file instead
+#
+{%- from "snmp/map.jinja" import snmp with context %}
+
+.include /lib/systemd/system/snmptrapd.service
+
+[Service]
+{%- if snmp.trapdargs is not none %}
+ExecStart=
+ExecStart=/usr/sbin/snmptrapd {{ snmp.trapdargs }}
+{%- endif %}
