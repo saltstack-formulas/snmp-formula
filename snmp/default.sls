@@ -13,3 +13,4 @@ default_snmpd:
     - mode: 644
     - watch_in:
       - service: {{ snmp.service }}
+

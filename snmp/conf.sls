@@ -4,6 +4,14 @@
 include:
   - snmp
 
+  
+/usr/local/bin/distro:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 750
+    - source: salt://snmp/files/distro
+
 snmp_conf:
   file.managed:
     - name: {{ snmp.config }}

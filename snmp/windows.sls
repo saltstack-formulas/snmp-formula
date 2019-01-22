@@ -1,7 +1,13 @@
 {% from "snmp/map.jinja" import snmp with context %}
 {% set mushStamp = salt['grains.get']('osfinger', 'NA') %}
 
-{% if mushStamp in ('Windows-2016Server', 'Windows-2012Server') %}
+{% if mushStamp in ('Windows-2016Server', 'Windows-2012ServerR2', 'Windows-2012Server') %}
+Remote Server Admin:
+  win_servermanager.installed:
+    - force: True
+    - recurse: True
+    - name: RSAT
+    
 Core Package:
   win_servermanager.installed:
     - force: True
