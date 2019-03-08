@@ -9,7 +9,7 @@ snmp_conf:
     - name: {{ snmp.config }}
     - template: jinja
     - context:
-      config: {{ conf.get('settings', {}) }}
+      config: {{ conf.get('settings', {}) | json }}
     - source: {{ snmp.source }}
     - user: root
     - group: {{ snmp.rootgroup }}
