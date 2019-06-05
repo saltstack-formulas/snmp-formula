@@ -11,6 +11,7 @@ source: salt://snmp/files/snmpd.conf
 sourcetrap: salt://snmp/files/snmptrapd.conf
 sourceagent: salt://snmp/files/snmp.conf
 trapdargs: -Lsd -p /var/run/snmptrapd.pid
+rootgroup: root
 {% endload %}
 
 {% load_yaml as platform_specific %}
@@ -21,7 +22,6 @@ RedHat:
     optionstrap: /etc/sysconfig/snmptrapd
     sourceoptions: salt://snmp/files/snmpd.options
     sourceoptionstrap: salt://snmp/files/snmptrapd.options
-    snmpdargs: -Lsd -Lf /dev/null -p /var/run/snmpd.pid -a
 Debian:
     pkg: snmpd
     pkgutils: snmp
@@ -31,18 +31,39 @@ Debian:
     mibs:
     snmpdrun: "yes"
     trapdrun: "no"
+Suse:
+    pkg: net-snmp
+    pkgutils: net-snmp
+    options: /etc/sysconfig/net-snmp
+    sourceoptions: salt://snmp/files/snmpd.options.suse
+    sourceoptionstrap: salt://snmp/files/snmptrapd.options.suse
+Gentoo:
+    pkg: net-analyzer/net-snmp
+    configdefault: /etc/conf.d/snmpd
+    sourcedefault: salt://snmp/files/snmpd.confd
+    snmpdargs: -I -smux
+    mibs:
+    snmpdrun: "yes"
+    trapdrun: "no"
+FreeBSD:
+    config: /usr/local/etc/snmp/snmpd.conf
+    pkg: net-snmp
+    pkgutils: net-snmp
+    rootgroup: wheel
 {% endload %}
 
 {% load_yaml as rhel_specific %}
-Red Hat Enterprise Linux Server-6:
-    sourceoptions: salt://snmp/files/snmpd.options.redhat6
-Red Hat Enterprise Linux Server-5:
-    sourceoptions: salt://snmp/files/snmpd.options.redhat5
+'7':
+    snmpdargs: '-LS0-6d'
+'6':
+    snmpdargs: '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a'
+'5':
+    snmpdargs: '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a'
 {% endload %}
 
 {% set platform_addition = salt['grains.filter_by'](platform_specific, default='RedHat') %}
-{% set rhel_addition = salt['grains.filter_by'](rhel_specific, grain='osfinger') %}
-{% set user_override = salt['pillar.get']('snmp:lookup', {}) %}
+{% set rhel_addition = salt['grains.filter_by'](rhel_specific, grain='osmajorrelease', default='default') %}
+{% set user_override = salt['pillar.get']('snmp', {}) %}
 
 {% do snmp.update(platform_addition) %}
 
