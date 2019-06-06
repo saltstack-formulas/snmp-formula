@@ -82,6 +82,7 @@ snmp:
       - username: 'myv3user'
         authpassphrase: 'myv3password'
         view: all
+        # securitylevel: priv
         # authproto: 'SHA'
         # privproto: 'AES'
         # privpassphrase: 'v3privpass'
@@ -90,6 +91,7 @@ snmp:
       - username: 'myv3user_rw'
         authpassphrase: 'myv3password'
         view: all
+        # securitylevel: priv
         # authproto: 'SHA'
         # privproto: 'AES'
         # privpassphrase: 'v3privpass'
