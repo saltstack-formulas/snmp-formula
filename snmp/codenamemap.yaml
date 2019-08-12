@@ -1,0 +1,9 @@
+stretch:
+  # use the default OS parameters except for -LS6d (which was -Lsd)
+  snmpdargs: -LS6d -Lf /dev/null -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f
+  # the value null means that the default OS parameters should be used
+  trapdargs: null
+  options: /etc/systemd/system/snmpd.service
+  optionstrap: /etc/systemd/system/snmptrapd.service
+  sourceoptions: salt://snmp/files/snmpd-systemd.options
+  sourceoptionstrap: salt://snmp/files/snmptrapd-systemd.options

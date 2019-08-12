@@ -1,1 +1,2 @@
-{% set conf = salt['pillar.get']('snmp:conf', {}) %}
+{% from "snmp/map.jinja" import snmp with context %}
+{% set conf = snmp.get('conf', {}) -%}
