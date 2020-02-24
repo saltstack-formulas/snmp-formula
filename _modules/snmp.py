@@ -20,16 +20,14 @@ def start_snmpd(init_binary = 'systemctl', parameters = ('start', 'snmpd.service
 	Use the init program to start the SNMPd deamon.
 	'''
 	
-	service_start_command = 'systemctl start snmpd.service'
-	return __salt__['cmd.run'](service_stop_command)
+	return __salt__['cmd.run'](ToDo)
 	
 def stop_snmpd(init_binary = 'systemctl', parameters = ('stop', 'snmpd.service')):
 	'''Stop the SNMPd deamon
 	Use the init program to stop the SNMPd deamon.
 	'''
 	
-	service_stop_command = 'systemctl stop snmpd.service'
-	return  __salt__['cmd.run'](service_stop_command)
+	return  __salt__['cmd.run'](ToDo)
 
 def check_user(username, snmpd_conf_path = '/etc/snmp/snmpd.conf'):
 	'''Check user list
