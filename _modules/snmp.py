@@ -19,21 +19,21 @@ def start_snmpd(init_binary = 'systemctl', parameters = ('start', 'snmpd.service
 	'''Start the SNMPd deamon
 	Use the init program to start the SNMPd deamon.
 	'''
-	
-	return __salt__['cmd.run'](ToDo)
-	
+
+	return __salt__['cmd.run']('{} {} {}'.format(init_binary, parameters[0], parameters[1]))
+
 def stop_snmpd(init_binary = 'systemctl', parameters = ('stop', 'snmpd.service')):
 	'''Stop the SNMPd deamon
 	Use the init program to stop the SNMPd deamon.
 	'''
-	
-	return  __salt__['cmd.run'](ToDo)
+
+	return  __salt__['cmd.run']('{} {} {}'.format(init_binary, parameters[0], parameters[1]))
 
 def check_user(username, snmpd_conf_path = '/etc/snmp/snmpd.conf'):
 	'''Check user list
 	Finds a user in the list of registered users. Returns true if is in the list, false otherwise.
 	'''
-	
+
 	with open(snmpd_conf_path, 'r') as f:
 		for	line in f.readlines():
 			if username in line:
@@ -59,7 +59,7 @@ def del_user(username, snmpd_conf_path = '/etc/snmp/snmpd.conf', snmpd_conf_var_
 	'''Delete user
 	Removes a user from the user list. Returns None.
 	'''
-	
+
 	stop_snmpd()
 
 	with open (snmpd_conf_path, 'r') as f:
@@ -75,5 +75,5 @@ def del_user(username, snmpd_conf_path = '/etc/snmp/snmpd.conf', snmpd_conf_var_
 		for line in var_lines:
 			if 'usmUser' not in line.strip("\n"):
 				f1.write(line)
-	
+
 	start_snmpd()
