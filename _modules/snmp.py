@@ -19,14 +19,14 @@ def start_snmpd(init_binary = 'systemctl', parameters = ('start', 'snmpd.service
 	'''Start the SNMPd deamon
 	Use the init program to start the SNMPd deamon.
 	'''
-
+	LOGGER.debug('Starting service %s', parameters[1])
 	return __salt__['cmd.run']('{} {} {}'.format(init_binary, parameters[0], parameters[1]))
 
 def stop_snmpd(init_binary = 'systemctl', parameters = ('stop', 'snmpd.service')):
 	'''Stop the SNMPd deamon
 	Use the init program to stop the SNMPd deamon.
 	'''
-
+	LOGGER.debug('Stopping service %s', parameters[1])
 	return  __salt__['cmd.run']('{} {} {}'.format(init_binary, parameters[0], parameters[1]))
 
 def check_user(username, snmpd_conf_path = '/etc/snmp/snmpd.conf'):
@@ -37,7 +37,9 @@ def check_user(username, snmpd_conf_path = '/etc/snmp/snmpd.conf'):
 	with open(snmpd_conf_path, 'r') as f:
 		for	line in f.readlines():
 			if username in line:
+				LOGGER.debug('User %s is enabled', username)
 				return True
+		LOGGER.debug('User %s not found in the system', username)
 		return False
 
 def add_user(username, authpass, privpass, read_only = False, auth_hash_sha = True, encryption_aes = True):
@@ -52,14 +54,14 @@ def add_user(username, authpass, privpass, read_only = False, auth_hash_sha = Tr
 	parameters += ['-X', privpass]
 	parameters += ['-x', 'AES' if encryption_aes else 'DES']
 	parameters += [username]
-
+	LOGGER.debug('Adding user %s ', username)
 	command_str = __salt__['cmd.run']('net-snmp-create-v3-user ' + ' '.join(parameters))
 
 def del_user(username, snmpd_conf_path = '/etc/snmp/snmpd.conf', snmpd_conf_var_path = '/var/lib/net-snmp/snmpd.conf'):
 	'''Delete user
 	Removes a user from the user list. Returns None.
 	'''
-
+	LOGGER.debug('Removing user %s ', username)
 	stop_snmpd()
 
 	with open (snmpd_conf_path, 'r') as f:
