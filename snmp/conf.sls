@@ -7,6 +7,7 @@ include:
 snmp_conf:
   file.managed:
     - name: {{ snmp.config }}
+    - makedirs: True
     - template: jinja
     - context:
       config: {{ conf.get('settings', {}) | json }}
