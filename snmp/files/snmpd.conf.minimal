@@ -16,8 +16,8 @@
 ##############################################################################
 # System contact information
 #
-sysLocation "{{ conf.get('location', 'Unknown (add saltstack pillar)') }}"
-sysContact "{{ conf.get('syscontact', 'Root <root@localhost> (add saltstack pillar)') }}"
+sysLocation {{ conf.get('location', 'Unknown (add saltstack pillar)') }}
+sysContact {{ conf.get('syscontact', 'Root <root@localhost> (add saltstack pillar)') }}
 
 {% if conf.get('logconnects') is not none %}
 {%- if conf.get('logconnects') %}
