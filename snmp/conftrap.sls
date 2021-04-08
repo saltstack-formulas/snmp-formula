@@ -1,7 +1,7 @@
 {% from "snmp/map.jinja" import snmp with context %}
 
 include:
-  - snmp
+  - snmp.trap
 
 snmptrap_conf:
   file.managed:
