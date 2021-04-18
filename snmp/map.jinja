@@ -50,6 +50,9 @@ FreeBSD:
     pkg: net-snmp
     pkgutils: net-snmp
     rootgroup: wheel
+Windows:
+    pkg: SNMP-Service
+    pkgutils: SNMP-WMI-Provider
 {% endload %}
 
 {% load_yaml as rhel_specific %}
@@ -80,3 +83,32 @@ FreeBSD:
 {% if user_override %}
     {% do snmp.update(user_override) %}
 {% endif %}
+
+{% set Sources = [] %}
+{% for rocommunity in salt['pillar.get']('snmp:conf:rocommunities', '') %}
+  Community: {{ rocommunity }}
+  {% set source = salt['pillar.get']('snmp:conf:rocommunities:'+ rocommunity +':source', '') %}
+  {% if source.__class__ in (().__class__, [].__class__) %}
+    {% for i in source %}
+    {% set WinManager = Sources.append(i) %}
+    {% endfor %}
+  {% elif source != '' %}
+    {% set WinManager = Sources.append(source) %}
+  {% else %}
+  {% endif %}
+{% endfor %}
+
+{% for rwcommunity in salt['pillar.get']('snmp:conf:rwcommunities', '') %}
+  Community: {{ rwcommunity }}
+  {% set source = salt['pillar.get']('snmp:conf:rwcommunities:'+ rwcommunity +':source', '') %}
+  {% if source.__class__ in (().__class__, [].__class__) %}
+    {% for i in source %}
+    {% set WinManager = Sources.append(i) %}
+    {% endfor %}
+  {% elif source != '' %}
+    {% set WinManager = Sources.append(source) %}
+  {% else %}
+  {% endif %}
+{% endfor %}
+
+{% do snmp.update({'Sources': Sources}) %}
