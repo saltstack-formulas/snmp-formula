@@ -5,7 +5,7 @@ snmp:
   #   trapdrun: 'no' # Needs "'", otherwise it'll be a bool
 
   conf:
-    location: 'Unknown (add saltstack pillar)'
+    sysLocation: 'Unknown (add saltstack pillar)'
     syscontact: 'Root <root@localhost> (add saltstack pillar)'
     logconnects: false
     # disk checks

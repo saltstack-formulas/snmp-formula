@@ -23,7 +23,7 @@ provisioner:
     snmp.sls:
       snmp:
         conf:
-          location: 'Right Here'
+          sysLocation: 'Right Here'
           syscontact: 'System Admin'
           logconnects: false
           views:
