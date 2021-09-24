@@ -1,3 +1,4 @@
+# vim: ft=yaml
 ---
 driver:
   name: vagrant

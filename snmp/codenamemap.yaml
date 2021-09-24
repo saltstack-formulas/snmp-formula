@@ -1,3 +1,5 @@
+# vim: ft=yaml
+---
 stretch:
   # use the default OS parameters except for -LS6d (which was -Lsd)
   snmpdargs: -LS6d -Lf /dev/null -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f
