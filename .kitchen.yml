@@ -24,7 +24,7 @@ provisioner:
       snmp:
         conf:
           sysLocation: 'Right Here'
-          syscontact: 'System Admin'
+          sysContact: 'System Admin'
           logconnects: false
           views:
             - name: all

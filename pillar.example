@@ -6,7 +6,7 @@ snmp:
 
   conf:
     sysLocation: 'Unknown (add saltstack pillar)'
-    syscontact: 'Root <root@localhost> (add saltstack pillar)'
+    sysContact: 'Root <root@localhost> (add saltstack pillar)'
     logconnects: false
     # disk checks
     #disk: /
