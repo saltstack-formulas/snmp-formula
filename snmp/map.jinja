@@ -73,7 +73,7 @@ FreeBSD:
     {% do snmp.update(rhel_addition) %}
 {% endif %}
 
-{% import_yaml "snmp/codenamemap.yaml" as codemap %}
+{% import_yaml "snmp/codenamemap.yml" as codemap %}
 {% set oscode = salt['grains.filter_by'](codemap, grain='oscodename', default=None) %}
 {% if oscode is not none %}
 {%   do snmp.update(oscode) %}
