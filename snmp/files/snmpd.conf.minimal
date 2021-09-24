@@ -19,13 +19,7 @@
 sysLocation {{ conf.get('sysLocation', 'Unknown (add saltstack pillar)') }}
 sysContact {{ conf.get('sysContact', 'Root <root@localhost> (add saltstack pillar)') }}
 
-{% if conf.get('logconnects') is not none %}
-{%- if conf.get('logconnects') %}
-# dontLogTCPWrappersConnects yes
-{%- else %}
-dontLogTCPWrappersConnects yes
-{%- endif %}
-{% endif %}
+dontLogTCPWrappersConnects {{ 'yes' if conf.get('dontLogTCPWrappersConnects')|to_bool else 'no' }}
 
 ###############################################################################
 # Access Control

@@ -7,7 +7,7 @@ snmp:
   conf:
     sysLocation: 'Unknown (add saltstack pillar)'
     sysContact: 'Root <root@localhost> (add saltstack pillar)'
-    logconnects: false
+    dontLogTCPWrappersConnects: true
     # disk checks
     #disk: /
     #disks:

@@ -25,7 +25,7 @@ provisioner:
         conf:
           sysLocation: 'Right Here'
           sysContact: 'System Admin'
-          logconnects: false
+          dontLogTCPWrappersConnects: true
           views:
             - name: all
               type: included
