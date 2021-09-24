@@ -1,113 +1,191 @@
 # vim: ft=yaml
 ---
 snmp:
-  # lookup:
-  #   snmpdargs: '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a'
-  #   trapdargs: '-Lsd -p /var/run/snmptrapd.pid'
-  #   trapdrun: 'no' # Needs "'", otherwise it'll be a bool
+  # Use `lookup` to override default config values
+  #   (such as those found in snmp/map.jinja)
+  lookup:
+    snmpdargs: '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a'
+    trapdargs: '-Lsd -p /var/run/snmptrapd.pid'
+    trapdrun: 'no' # Single quote wrap to avoid boolean behavior
 
   conf:
-    sysLocation: 'Unknown (add saltstack pillar)'
-    sysContact: 'Root <root@localhost> (add saltstack pillar)'
+    ## Config reference: http://www.net-snmp.org/docs/man/snmpd.conf.html
+    sysLocation: 'IT Office, Third Floor'
+    sysContact: 'John Doe <jdoe@fakellc.net>'
+    # (SALT: Omitting dontLogTCPWrappersConnects defaults to 'true')
     dontLogTCPWrappersConnects: true
-    # disk checks
-    #disk: /
+
+    #################################
+    ###   Disk Usage Monitoring   ###
+    #################################
+    # ref: http://www.net-snmp.org/docs/man/snmpd.conf.html#lbAS
     #disks:
-    #  - /
-    # vacm com2sec's (map communities into security names)
+    #  (path): (min-space-in-kB)
+    disks:
+      '/': 1000000
+      '/nfs/apache': 250000
+
+    ##############################
+    ###   VACM Configuration   ###
+    ##############################
+    # ref: http://www.net-snmp.org/docs/man/snmpd.conf.html#lbAL
+    # `com2sec` : map an SNMPv1 or SNMPv2c community string to a 
+    #             security name - either from a particular range of 
+    #             source addresses, or globally ("default")
+    #             (SALT: multiple entries allowed, list syntax)
     #com2sec:
-    #  - name: local
-    #    source: localhost
-    #    community: localhost
-    # vacm group's (map security names to group names)
+    #  - name: (helpful label)
+    #    source: {hostname|IP+Mask|IP+Subnet}
+    #    community: (community string)
+    com2Sec:
+      - name: localSec
+        source: 10.20.30.0/24
+        community: ROwrowrowtheboat
+      - name: secOps
+        source: 110.120.130.0/24
+        community: seriousSecurityThx
+    #
+    # `group` : maps a security name (in the specified security model)
+    #           into a named group
+    #           (SALT: multiple entries allowed, list syntax)
     #groups:
-    #  - name: ROgroup1
-    #    version: usm
-    #    secname: local
-    #  - name: ROgroup1
-    #    version: v1
-    #    secname: local
-    #  - name: ROgroup1
-    #    version: v2c
-    #    secname: local
-    #  - name: Other
-    #    version: usm
-    #    secname: local
-    #  - name: Other
-    #    version: v1
-    #    secname: local
-    #  - name: Other
-    #    version: v2c
-    #    secname: local
-    # vacm views (map mib trees to views)
+    #  - name: (helpful label)
+    #    version: {v1|v2c|usm|tsm|ksm}
+    #    secname: (any valid `com2Sec` entry defined)
+    groups:
+      - name: ROwers1
+        version: v1
+        secname: localSec
+      - name: ROwers2
+        version: v2c
+        secname: localSec
+      - name: SecEngTeam
+        version: usm
+    #
+    # `view` : defines a named "view" - a subset of the overall OID tree
+    #          (SALT: multiple entries allowed, list syntax)
+    #views:
+    #  - name: (helpful label)
+    #    type: {included|excluded}
+    #    oid: (oid string)
+    #    mask: (list of hex octets to match against)  ## OPTIONAL
     views:
       - name: all
         type: included
         oid: '.1'
-        #optional mask
         mask: 80
-    # vacm access (map groups to views with access restrictions)
+      - name: ifRow4
+        type: included
+        oid: '.1.3.6.1.2.1.2.2.1.0.4'
+      - name: iso3
+        type: included
+        oid: '.iso.org.dod.mgmt'
+    #         
+    # `access` : maps from a group of users/communities (with a particular 
+    #            security model and minimum security level, and in a 
+    #            specific context) to one of three views, depending on the
+    #            request being processed
+    #            (SALT: multiple entries allowed, list syntax)
     #access:
-    #  - name: ROgroup1
-    #    context: '""'
-    #    match: any
-    #    level: noauth
-    #    prefix: exact
-    #    read: all
-    #    write: none
-    #    notify: none
-    #  - name: Other
-    #    context: "cont"
-    #    match: any
-    #    level: noauth
-    #    prefix: exact
-    #    read: all
-    #    write: none
-    #    notify: none
-    # v1/2c read-only communities
+    #  - name: (any valid `group` entry defined)
+    #    context: (incoming request context) # can be leftout to assume 'blank'
+    #    match: {any|v1|v2c|usm|tsm|ksm}
+    #    level: {noauth|auth|priv} # v1 & v2c require 'noauth'
+    #    prefix: {exact|prefix}
+    #    read: {all|none} # omitting selects 'none'
+    #    write: {all|none} # omitting selects 'none'
+    #    notify: {all|none} # omitting selects 'none'
+    access:
+      - name: ROwers1
+        match: any
+        level: noauth
+        prefix: exact
+        read: all
+      - name: SecEngTeam
+        match: any
+        level: auth
+        prefix: exact
+        read: all
+        write: all
+    
+    ######################################
+    ###   Traditional Access Control   ###
+    ######################################
+    # ref: http://www.net-snmp.org/docs/man/snmpd.conf.html#lbAK
+    ## v1/v2c ##
+    # rXcommunity - specify an SNMPv1 or SNMPv2c community that will be 
+    #               allowed read-only (if `rocommunity`) or be allowed
+    #               read-write (if `rwcommunity`) access
+    #               (SALT: suffix '6' for ipv6 version of the communities,
+    #                      such as 'rocommunities6' or 'rwcommunities6')
+    # SYNTAX WITH SOURCE
+    #rXcommunities:
+    #  (community string):
+    #    source: {hostname|IP+Mask|IP+Subnet} or [{hostname|IP+Mask|IP+Subnet}, ...] # list format or single entry
     rocommunities:
       public:
-        source: [localhost, 192.168.0.0/24, 192.168.1.0/24]
-      withoutsource:
-    # or
-    rocommunities:
-      - public
-    #rocommunities6:
-    #  public:
-    #    source: 2001:DB8::1
-    # v1/2c read-write communities
+        source: [localhost, 192.168.0.0/24, 2001:DB8::1]
     rwcommunities:
       private:
         source: 192.168.1.0/24
-    # v3 users for read-only
+    # SYNTAX WITHOUT SOURCE
+    #rXcommunities:
+    #  - (community string)
+    #  - (another community string)
+    rocommunities:
+      - monitoring
+      - dontbreakit
+    rwcommunities:
+      - privatestuff
+    ## v3 ##
+    # (SALT: The default authproto will be SHA, instead of MD5,
+    #        and the default privproto will be AES, instead of
+    #        DES, for the sake of security.
+    #        `securitylevel` = 'priv' enforces encryption, in
+    #        addition to auth, which requires privpassphrase 
+    #        to be defined.
+    #rXusers:
+    #  - username: (snmpv3 user name)
+    #    authpassphrase: (authentication password)
+    #    privpassphrase: (encryption password)
+    #    securitylevel: {auth|priv} # omitting selects 'auth'                    
+    #    authproto: {MD5|SHA} # omitting selects 'SHA'
+    #    privproto: {DES|AES} # omitting selects 'AES'
+    #    view: (any valid `view` entry defined) ## OPTIONAL
     rousers:
-      - username: 'myv3user'
-        authpassphrase: 'myv3password'
-        view: all
-        # securitylevel: priv
-        # authproto: 'SHA'
-        # privproto: 'AES'
-        # privpassphrase: 'v3privpass'
-    # v3 users for read-write
+      - username: 'someNewUser'
+        authpassphrase: 'tklhgKipJF1nNY'
+        view: all        
     rwusers:
-      - username: 'myv3user_rw'
-        authpassphrase: 'myv3password'
-        view: all
-        # securitylevel: priv
-        # authproto: 'SHA'
-        # privproto: 'AES'
-        # privpassphrase: 'v3privpass'
-    # misc snmpd.conf settings
+      - username: 'somethingCICD'
+        authpassphrase: 'VPluOBhwmnFB6z'
+        privpassphrase: 'IO0wa0wROUSaeB'
+        securitylevel: priv
+        view: iso3
+
+    ########################################
+    ###   Miscellaneous SNMPD Settings   ###
+    ########################################
+    # (SALT: These are example settings, but any valid setting
+    #        should be acceptable here.)
     settings:
-      # agentAddress: 'udp:161,udp6:[::1]:161'
+      # ref: http://www.net-snmp.org/docs/man/snmpd.conf.html#lbAD
+      #agentAddress: [<transport-specifier>:]<transport-address>
+      agentAddress: 'udp:161,udp6:[::1]:161'
       sysServices: 72
       master: ['agentx']
-    # custom MIB files
+    # (SALT: For custom MIB files, follow this syntax)
     # mibs:
     #     <MIB name>: salt://<path to MIB.txt>
+    mibs:
+      GPFS: salt://gpfs/files/GPFS-mib.txt
+    # (SALT: The name field for `extent` entries can be a human
+    #        readable string or an OID string.)
+    # ref: http://www.net-snmp.org/docs/man/snmpd.conf.html#lbAZ
     extend:
       - name: 'HTTPD_PIDS'
         prog: '/bin/sh /path/to/check_apache.sh'
+    # ref: http://www.net-snmp.org/docs/man/snmpd.conf.html#lbBD
     dlmod:
       - name: 'nstAgentPluginObject'
         sharedobject: '/path/to/nstAgentPluginObject.so'
