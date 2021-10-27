@@ -142,12 +142,12 @@ snmp:
     #        and the default privproto will be AES, instead of
     #        DES, for the sake of security.
     #        `securitylevel` = 'priv' enforces encryption, in
-    #        addition to auth, which requires privpassphrase 
+    #        addition to auth, which *requires* privpassphrase 
     #        to be defined.
     #rXusers:
     #  - username: (snmpv3 user name)
     #    authpassphrase: (authentication password)
-    #    privpassphrase: (encryption password)
+    #    privpassphrase: (encryption password) ## optional only if `securitylevel` = 'auth'
     #    securitylevel: {auth|priv} # omitting selects 'auth'                    
     #    authproto: {MD5|SHA} # omitting selects 'SHA'
     #    privproto: {DES|AES} # omitting selects 'AES'
