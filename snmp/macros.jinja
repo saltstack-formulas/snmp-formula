@@ -4,7 +4,7 @@
 
 {# mode can be either 'ro' or 'rw' #}
 {%- macro v12c_communities(mode, proto='') -%}
-  {% set communities = conf.get(mode+'communities'+proto, []) -%}
+  {% set communities = conf.get(mode~'communities'~proto, []) -%}
   {%- for community in communities %}
     {%- if communities is mapping and communities.get(community, {}) is  mapping %}
       {%- set source = communities.get(community).get('source', '') %}
@@ -17,8 +17,12 @@
       {%- set source = [source] %}
     {%- endif %}
     {%- for src in source -%}
-{{ mode }}community     {{ community }}       {{ src }}{{' -V ' + view if view else ''}}
+{{ mode }}community     {{ community }}       {{ src }}{{' -V ' ~ view if view else ''}}
 {%      endfor %}
   {%- endfor -%}
 {% endmacro-%}
 
+{%- macro v3_createUser_string(user) -%}
+  {% set seclevel = user.get('securitylevel', 'auth') -%}
+createUser {{ user.username }} {{ user.get('authproto', 'SHA') }} {{ user.authpassphrase }} {{ user.get('privproto', 'AES') }} {% if seclevel == "priv" %}{{ user.privpassphrase }}{% else %}{{ user.get('privpassphrase', '') }}{% endif %}
+{% endmacro -%}
