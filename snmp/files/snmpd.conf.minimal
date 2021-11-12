@@ -1,5 +1,6 @@
 {% from "snmp/conf.jinja" import conf with context -%}
-{% from "snmp/macros.jinja" import v12c_communities with context -%}
+{% from "snmp/map.jinja" import snmp with context -%}
+{% from "snmp/macros.jinja" import v12c_communities,v3_createUser_string with context -%}
 
 # {{ salt['pillar.get']('SALT_MANAGED') }}
 #
@@ -66,13 +67,13 @@ access {{ entry.name }} {{ entry.context or '""' }} {{ entry.match }} {{ entry.l
 # Version 3 users (read only)
 {%- for user in conf.get('rousers', []) %}
 rouser {{ user.username }} {% if user.get('view') %}{{ user.get('securitylevel', 'auth') }} -V {{ user.view }}{% endif %}
-{% if conf.get('dynamicconfig') %}# createUser string will be added to {{ conf.dynamicconfig }}{% else %}{{ v3_createUser_string(user) }}{% endif %}
+{% if 'dynamicconfig' in snmp  %}# createUser string will be added to {{ snmp.dynamicconfig }}{% else %}{{ v3_createUser_string(user) }}{% endif %}
 {%- endfor %}
 
 # Version 3 users (read/write)
 {%- for user in conf.get('rwusers', []) %}
 rwuser {{ user.username }} {% if user.get('view') %}{{ user.get('securitylevel', 'auth') }} -V {{ user.view }}{% endif %}
-{% if conf.get('dynamicconfig') %}# createUser string will be added to {{ conf.dynamicconfig }}{% else %}{{ v3_createUser_string(user) }}{% endif %}
+{% if 'dynamicconfig' in snmp %}# createUser string will be added to {{ snmp.dynamicconfig }}{% else %}{{ v3_createUser_string(user) }}{% endif %}
 {%- endfor %}
 
 # Extra settings

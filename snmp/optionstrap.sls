@@ -13,5 +13,5 @@ trap_options:
     - user: root
     - group: root
     - mode: 644
-    - watch_in:
+    - watch:
       - service: {{ snmp.servicetrap }}

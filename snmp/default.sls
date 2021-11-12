@@ -13,5 +13,5 @@ default_snmpd:
     - user: root
     - group: root
     - mode: 644
-    - watch_in:
+    - watch:
       - service: {{ snmp.service }}

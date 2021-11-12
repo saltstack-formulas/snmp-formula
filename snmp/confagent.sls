@@ -16,7 +16,7 @@ snmp_mib_{{ name }}:
     - user: root
     - group: root
     - mode: 644
-    - watch_in:
+    - watch:
       - service: {{ snmp.service }}
 {% endif %}
 {% endfor %}
@@ -29,5 +29,5 @@ snmp_agentconf:
     - user: root
     - group: root
     - mode: 644
-    - watch_in:
+    - watch:
       - service: {{ snmp.service }}
