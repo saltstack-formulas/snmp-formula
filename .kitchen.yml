@@ -1,19 +1,108 @@
 # vim: ft=yaml
 ---
+# For help on this file's format, see https://kitchen.ci/
 driver:
-  name: vagrant
+  name: docker
+  use_sudo: false
+  privileged: true
+  run_command: /usr/lib/systemd/systemd
 
 platforms:
-  - name: centos-6.8
-  - name: centos-7.2
-  - name: ubuntu-14.04
-  - name: ubuntu-16.04
-  - name: debian-8.5
+  ## SALT `master`
+  - name: debian-11-master-py3
+    driver:
+      image: saltimages/salt-master-py3:debian-11
+      run_command: /lib/systemd/systemd
+  - name: debian-10-master-py3
+    driver:
+      image: saltimages/salt-master-py3:debian-10
+      run_command: /lib/systemd/systemd
+  - name: debian-9-master-py3
+    driver:
+      image: saltimages/salt-master-py3:debian-9
+      run_command: /lib/systemd/systemd
+  - name: ubuntu-2004-master-py3
+    driver:
+      image: saltimages/salt-master-py3:ubuntu-20.04
+      run_command: /lib/systemd/systemd
+  - name: ubuntu-1804-master-py3
+    driver:
+      image: saltimages/salt-master-py3:ubuntu-18.04
+      run_command: /lib/systemd/systemd
+  - name: centos-8-master-py3
+    driver:
+      image: saltimages/salt-master-py3:centos-8
+  - name: centos-7-master-py3
+    driver:
+      image: saltimages/salt-master-py3:centos-7
+  - name: fedora-34-master-py3
+    driver:
+      image: saltimages/salt-master-py3:fedora-34
+  - name: fedora-33-master-py3
+    driver:
+      image: saltimages/salt-master-py3:fedora-33
+  - name: opensuse-leap-153-master-py3
+    driver:
+      image: saltimages/salt-master-py3:opensuse-leap-15.3
+    # Workaround to avoid intermittent failures on `opensuse-leap-15.3`:
+    # => SCP did not finish successfully (255):  (Net::SCP::Error)
+    transport:
+      max_ssh_sessions: 1
+  - name: opensuse-leap-152-master-py3
+    driver:
+      image: saltimages/salt-master-py3:opensuse-leap-15.2
+    # Workaround to avoid intermittent failures on `opensuse-leap-15.2`:
+    # => SCP did not finish successfully (255):  (Net::SCP::Error)
+    transport:
+      max_ssh_sessions: 1
+  - name: opensuse-tmbl-latest-master-py3
+    driver:
+      image: saltimages/salt-master-py3:opensuse-tumbleweed-latest
+    # Workaround to avoid intermittent failures on `opensuse-tumbleweed`:
+    # => SCP did not finish successfully (255):  (Net::SCP::Error)
+    transport:
+      max_ssh_sessions: 1
+  - name: amazonlinux-2-master-py3
+    driver:
+      image: saltimages/salt-master-py3:amazonlinux-2
+  - name: oraclelinux-8-master-py3
+    driver:
+      image: saltimages/salt-master-py3:oraclelinux-8
+  - name: oraclelinux-7-master-py3
+    driver:
+      image: saltimages/salt-master-py3:oraclelinux-7
+  - name: arch-base-latest-master-py3
+    driver:
+      image: saltimages/salt-master-py3:arch-base-latest
+  - name: gentoo-stage3-latest-master-py3
+    driver:
+      image: saltimages/salt-master-py3:gentoo-stage3-latest
+      run_command: /sbin/init
+  - name: gentoo-stage3-systemd-master-py3
+    driver:
+      image: saltimages/salt-master-py3:gentoo-stage3-systemd
+  - name: almalinux-8-master-py3
+    driver:
+      image: saltimages/salt-master-py3:almalinux-8
+  - name: rockylinux-8-master-py3
+    driver:
+      image: saltimages/salt-master-py3:rockylinux-8
+
+verifier:
+  # https://www.inspec.io/
+  name: inspec
+  #sudo: true
+  # cli, documentation, html, progress, json, json-min, json-rspec, junit
+  reporter:
+    - cli
 
 provisioner:
   name: salt_solo
+  # uncomment the line below for extreme output
+  #log_level: debug
+  require_chef: false
   salt_install: bootstrap
-  salt_bootstrap_url: https://bootstrap.saltstack.com
+  salt_bootstrap_url: "https://bootstrap.saltstack.com"
   salt_version: latest
   formula: snmp
   pillars:
@@ -34,18 +123,14 @@ provisioner:
               mask: 80
           rocommunities:
             public:
-              source:
-                - localhost
-                - 192.168.0.0/24
-                - 192.168.1.0/24
+              source: [localhost, 192.168.0.0/24, 192.168.1.0/24]
           rwcommunities:
             private:
-              source:
-                - 192.168.1.0/24
+              source: [192.168.1.0/24]
           rousers:
+          # if this is changed, please update test/integration/default/snmp_spec.rb too
             - username: 'myv3user'
               authpassphrase: 'myv3password'
-              view: all
               authproto: 'SHA'
               privproto: 'AES'
               privpassphrase: 'v3privpass'
