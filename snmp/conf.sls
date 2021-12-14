@@ -34,7 +34,7 @@ snmpv3 creating {{ user.username }} step 1 of 3:
   service.dead:
     - name: {{ snmp.service }}
     - unless:
-      - "snmpget -v3 -l {{ securitylevel }} -u {{ user.username }} -a {{ user.get('authproto', 'SHA') }} -A {{ user.authpassphrase }} -x {{ user.get('privproto', 'AES') }} {% if securitylevel == "authPriv" %}-X {{ user.privpassphrase }}{% endif %}127.0.0.1 1.3.6.1.2.1.1.5.0"
+      - "snmpget -v3 -l {{ securitylevel }} -u {{ user.username }} -a {{ user.get('authproto', 'SHA') }} -A {{ user.authpassphrase }} -x {{ user.get('privproto', 'AES') }} {% if securitylevel == "authPriv" %}-X {{ user.privpassphrase }}{% endif %} 127.0.0.1 1.3.6.1.2.1.1.5.0"
 
 snmpv3 creating {{ user.username }} step 2 of 3:
   file.line:
