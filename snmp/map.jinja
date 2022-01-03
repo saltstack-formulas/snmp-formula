@@ -1,6 +1,7 @@
 {# Debian (up to and excluding 9.x 'Stretch') uses snmpd init script for both snmpd/snmptrapd! #}
 
 {% load_yaml as snmp %}
+pkg: net-snmp
 service: snmpd
 servicetrap: snmptrapd
 config: /etc/snmp/snmpd.conf
@@ -50,6 +51,7 @@ FreeBSD:
     pkg: net-snmp
     pkgutils: net-snmp
     rootgroup: wheel
+fallback: {}
 {% endload %}
 
 {% load_yaml as rhel_specific %}
@@ -61,7 +63,7 @@ FreeBSD:
     snmpdargs: '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a'
 {% endload %}
 
-{% set platform_addition = salt['grains.filter_by'](platform_specific, default='RedHat') %}
+{% set platform_addition = salt['grains.filter_by'](platform_specific, default='fallback') %}
 {% set rhel_addition = salt['grains.filter_by'](rhel_specific, grain='osmajorrelease', default='default') %}
 {% set user_override = salt['pillar.get']('snmp', {}) %}
 
