@@ -15,8 +15,8 @@
       {%- set source = [source] %}
     {%- endif %}
     {%- for src in source -%}
-{{ mode }}community     {{ community }}       {{ src }}{{' -V ' + view if view else ''}}
+{{ mode }}community     {{ community }}       {{ src }}{{ ' -V ' + view if view else '' }}
 {%      endfor %}
   {%- endfor -%}
-{% endmacro-%}
+{% endmacro -%}
 
