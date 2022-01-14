@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.1](https://github.com/saltstack-formulas/snmp-formula/compare/v0.10.0...v0.10.1) (2022-01-14)
+
+
+### Documentation
+
+* **changelog:** merge previous changelog into new one ([057d277](https://github.com/saltstack-formulas/snmp-formula/commit/057d277b686ba007100fede0d9228bce56df5292))
+
 # [0.10.0](https://github.com/saltstack-formulas/snmp-formula/compare/v0.9.3...v0.10.0) (2022-01-14)
 
 
