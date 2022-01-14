@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+---
 snmp:
   # lookup:
   #   snmpdargs: '-Lsd -Lf /dev/null -p /var/run/snmpd.pid -a'
@@ -9,16 +12,16 @@ snmp:
     syscontact: 'Root <root@localhost> (add saltstack pillar)'
     logconnects: false
     # disk checks
-    #disk: /
-    #disks:
+    # disk: /
+    # disks:
     #  - /
     # vacm com2sec's (map communities into security names)
-    #com2sec:
+    # com2sec:
     #  - name: local
     #    source: localhost
     #    community: localhost
     # vacm group's (map security names to group names)
-    #groups:
+    # groups:
     #  - name: ROgroup1
     #    version: usm
     #    secname: local
@@ -42,10 +45,10 @@ snmp:
       - name: all
         type: included
         oid: '.1'
-        #optional mask
+        # optional mask
         mask: 80
     # vacm access (map groups to views with access restrictions)
-    #access:
+    # access:
     #  - name: ROgroup1
     #    context: '""'
     #    match: any
@@ -66,11 +69,11 @@ snmp:
     rocommunities:
       public:
         source: [localhost, 192.168.0.0/24, 192.168.1.0/24]
-      withoutsource:
+      withoutsource: null
     # or
-    rocommunities:
-      - public
-    #rocommunities6:
+    # rocommunities:
+    #   - public
+    # rocommunities6:
     #  public:
     #    source: 2001:DB8::1
     # v1/2c read-write communities
