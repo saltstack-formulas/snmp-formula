@@ -21,6 +21,7 @@ RedHat:
     pkgutils: net-snmp-utils
     options: /etc/sysconfig/snmpd
     optionstrap: /etc/sysconfig/snmptrapd
+    persistentconfig: /var/lib/net-snmp/snmpd.conf
     sourceoptions: salt://snmp/files/snmpd.options
     sourceoptionstrap: salt://snmp/files/snmptrapd.options
 Debian:
@@ -28,6 +29,7 @@ Debian:
     pkgutils: snmp
     configdefault: /etc/default/snmpd
     sourcedefault: salt://snmp/files/snmpd.default
+    persistentconfig: /var/lib/snmp/snmpd.conf
     snmpdargs: -Lsd -Lf /dev/null -u snmp -g snmp -I -smux,mteTrigger,mteTriggerConf -p /var/run/snmpd.pid
     mibs:
     snmpdrun: "yes"
