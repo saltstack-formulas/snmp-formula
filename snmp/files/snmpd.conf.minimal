@@ -1,7 +1,7 @@
 {% from "snmp/conf.jinja" import conf with context -%}
 {% from "snmp/macros.jinja" import v12c_communities with context -%}
 
-# {{ salt['pillar.get']('SALT_MANAGED') }}
+# {{ salt['pillar.get']('SALT_MANAGED','This file is managed by salt. Do not edit') }}
 #
 # DO NOT EDIT
 #
