@@ -5,10 +5,13 @@
 snmp:
   pkg.installed:
     - name: {{ snmp.pkg }}
-  service.enabled:
+  service.running:
     - name: {{ snmp.service }}
+    - enable: true
     - require:
       - pkg: {{ snmp.pkg }}
+
+snmp_daemon_start:
   service.running:
     - name: {{ snmp.service }}
     - watch:
