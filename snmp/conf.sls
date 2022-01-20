@@ -17,5 +17,3 @@ snmp_conf:
     - user: root
     - group: {{ snmp.rootgroup }}
     - mode: 644
-    - watch_in:
-      - service: {{ snmp.service }}

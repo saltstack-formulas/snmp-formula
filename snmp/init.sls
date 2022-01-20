@@ -5,11 +5,14 @@
 snmp:
   pkg.installed:
     - name: {{ snmp.pkg }}
-  service.running:
+  service.enabled:
     - name: {{ snmp.service }}
-    - enable: true
     - require:
       - pkg: {{ snmp.pkg }}
+  service.running:
+    - name: {{ snmp.service }}
+    - watch:
+      - file: {{ snmp.config }}
 
 {% if grains['os_family'] == 'Debian' and grains['osmajorrelease'] < 9 %}
 include:
