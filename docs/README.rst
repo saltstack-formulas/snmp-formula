@@ -113,7 +113,7 @@ For example, you may setup generic SNMP configuration in common pillar file, and
     snmp:
       conf:
         settings:
-          logconnects: false
+          dontLogTCPWrappersConnects: false
           sysServices: 72
 
 Whereas team, that wants to monitor GPFS with SNMP on the same cluster will add this pillar file to their package:
