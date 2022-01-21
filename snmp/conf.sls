@@ -37,13 +37,13 @@ snmpv3 creating {{ user.username }} step 2 of 3:
     - location: end
     - content: {{ v3_createUser_string(user) }}
     - show_changes: False
-    - require:
+    - onchanges:
       - snmpv3 creating {{ user.username }} step 1 of 3
 
 snmpv3 creating {{ user.username }} step 3 of 3:
   service.running:
     - name: {{ snmp.service }}
-    - require:
+    - onchanges:
       - snmpv3 creating {{ user.username }} step 2 of 3
 {% endfor %}
 {% endfor %}
