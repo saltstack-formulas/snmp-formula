@@ -15,12 +15,15 @@
       {%- set source = [source] %}
     {%- endif %}
     {%- for src in source -%}
-{{ mode }}community     {{ community }}       {{ src }}{{' -V ' ~ view if view else ''}}
+{{ mode~'community' }}     {{ community }}       {{ src }} {{ ' -V ' ~ view if view else '' }}
 {%      endfor %}
   {%- endfor -%}
-{% endmacro-%}
+{% endmacro -%}
 
 {%- macro v3_createUser_string(user) -%}
   {% set seclevel = user.get('securitylevel', 'auth') -%}
-createUser {{ user.username }} {{ user.get('authproto', 'SHA') }} {{ user.authpassphrase }} {{ user.get('privproto', 'AES') }} {% if seclevel == "priv" %}{{ user.privpassphrase }}{% else %}{{ user.get('privpassphrase', '') }}{% endif %}
+  {% set authproto = user.get('authproto', 'SHA') -%}
+  {% set privproto = user.get('privproto', 'AES') %}
+  {% set privpass = user.get('privpassphrase', '') %}
+createUser {{ user.username }} {{ authproto }} {{ user.authpassphrase }} {{ privproto }} {{ privpass }}
 {%- endmacro -%}

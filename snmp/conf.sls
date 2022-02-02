@@ -22,13 +22,18 @@ snmp_conf:
 {% if 'persistentconfig' in snmp %}
 {% for groups in ['rousers', 'rwusers'] %}
 {% for user in conf.get(groups, []) %}
-{% set securitylevel = 'authPriv' if user.get('securitylevel') == 'priv' else 'authNoPriv' %}
+{% set seclevel = 'authPriv' if user.get('securitylevel') == 'priv' else 'authNoPriv' %}
+{% set uname = user.username %}
+{% set authproto = user.get('authproto', 'SHA') %}
+{% set authpass = user.authpassphrase %}
+{% set privproto = user.get('privproto', 'AES') %}
+{% set privpass = '-X ' ~ user.privpassphrase if seclevel == 'authPriv' else '' %}
 {# if test fails, stop snmpd, add user to persistent config file, restart snmpd #}
 snmpv3 creating {{ user.username }} step 1 of 3:
   service.dead:
     - name: {{ snmp.service }}
     - unless:
-      - "snmpget -v3 -l {{ securitylevel }} -u {{ user.username }} -a {{ user.get('authproto', 'SHA') }} -A {{ user.authpassphrase }} -x {{ user.get('privproto', 'AES') }} {% if securitylevel == "authPriv" %}-X {{ user.privpassphrase }}{% endif %} 127.0.0.1 1.3.6.1.2.1.1.5.0 -On"
+      - "snmpget -v3 -l {{ seclevel }} -u {{ uname }} -a {{ authproto }} -A {{ authpass }} -x {{ privproto }} {{ privpass }} 127.0.0.1 1.3.6.1.2.1.1.5.0 -On"
 
 snmpv3 creating {{ user.username }} step 2 of 3:
   file.line:

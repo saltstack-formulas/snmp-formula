@@ -11,9 +11,9 @@ control 'snmp.config.file' do
     else
       %w[/etc/snmp/snmpd.conf root]
     end
-  
+
   # Override for persistent config file
-  createUser_str =
+  create_user_str =
     case platform[:family]
     when 'debian'
       'createUser string will be added to /var/lib/snmp/snmpd.conf'
@@ -38,7 +38,7 @@ control 'snmp.config.file' do
     its('content') { should include 'rwcommunity     private       192.168.1.0/24' }
     its('content') { should include 'rouser myv3user auth -V all' }
     its('content') do
-      should include createUser_str
+      should include create_user_str
     end
   end
 end
