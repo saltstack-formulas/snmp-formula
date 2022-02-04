@@ -20,10 +20,10 @@
   {%- endfor -%}
 {% endmacro -%}
 
-{%- macro v3_createUser_string(user) -%}
+{% macro v3_createUser_string(user) -%}
   {% set seclevel = user.get('securitylevel', 'auth') -%}
   {% set authproto = user.get('authproto', 'SHA') -%}
-  {% set privproto = user.get('privproto', 'AES') %}
-  {% set privpass = user.get('privpassphrase', '') %}
+  {% set privproto = user.get('privproto', 'AES') -%}
+  {% set privpass = user.get('privpassphrase', '') -%}
 createUser {{ user.username }} {{ authproto }} {{ user.authpassphrase }} {{ privproto }} {{ privpass }}
-{%- endmacro -%}
+{%- endmacro %}
