@@ -17,7 +17,7 @@ control 'snmp.config.file' do
     case platform[:family]
     when 'debian'
       'createUser string will be added to /var/lib/snmp/snmpd.conf'
-    when 'redhat'
+    when 'redhat', 'fedora'
       'createUser string will be added to /var/lib/net-snmp/snmpd.conf'
     else
       'createUser myv3user SHA myv3password AES v3privpass'
