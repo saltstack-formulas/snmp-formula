@@ -3,9 +3,9 @@
 ---
 snmp:
   conf:
-    location: 'Right Here'
-    syscontact: 'System Admin'
-    logconnects: false
+    sysLocation: 'Right Here'
+    sysContact: 'System Admin'
+    dontLogTCPWrappersConnects: true
     views:
       - name: all
         type: included

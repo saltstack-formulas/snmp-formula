@@ -1,3 +1,5 @@
+# vim: ft=sls
+
 {% from "snmp/map.jinja" import snmp with context %}
 
 include:

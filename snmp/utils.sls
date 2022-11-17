@@ -1,5 +1,9 @@
+# vim: ft=sls
+
 {% from "snmp/map.jinja" import snmp with context %}
 
-snmp-utils:
+{% if 'pkgutils' in snmp -%}
+snmp_utils:
   pkg.installed:
     - name: {{ snmp.pkgutils }}
+{% endif -%}

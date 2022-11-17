@@ -1,7 +1,8 @@
 {% from "snmp/conf.jinja" import conf with context -%}
-{% from "snmp/macros.jinja" import v12c_communities with context -%}
+{% from "snmp/map.jinja" import snmp with context -%}
+{% from "snmp/macros.jinja" import v12c_communities,v3_createUser_string with context -%}
 
-# {{ salt['pillar.get']('SALT_MANAGED') }}
+# {{ salt['pillar.get']('SALT_MANAGED','This file is managed by salt. Do not edit') }}
 #
 # DO NOT EDIT
 #
@@ -16,16 +17,10 @@
 ##############################################################################
 # System contact information
 #
-sysLocation {{ conf.get('location', 'Unknown (add saltstack pillar)') }}
-sysContact {{ conf.get('syscontact', 'Root <root@localhost> (add saltstack pillar)') }}
+sysLocation {{ conf.get('sysLocation', 'Unknown (add saltstack pillar)') }}
+sysContact {{ conf.get('sysContact', 'Root <root@localhost> (add saltstack pillar)') }}
 
-{% if conf.get('logconnects') is not none %}
-{%- if conf.get('logconnects') %}
-# dontLogTCPWrappersConnects yes
-{%- else %}
-dontLogTCPWrappersConnects yes
-{%- endif %}
-{% endif %}
+dontLogTCPWrappersConnects {{ 'no' if 'dontLogTCPWrappersConnects' in conf and not conf.get('dontLogTCPWrappersConnects')|to_bool else 'yes' }}
 
 ###############################################################################
 # Access Control
@@ -61,7 +56,7 @@ view {{ entry.name }} {{ entry.type }} {{ entry.oid }} {{ entry.mask if 'mask' i
 
 #       group          context sec.model sec.level prefix read   write  notif
 {%- for entry in conf.get('access', []) %}
-access {{ entry.name }} {{ entry.context }} {{ entry.match }} {{ entry.level }} {{ entry.prefix }} {{ entry.read }} {{ entry.write }} {{ entry.notify }}
+access {{ entry.name }} {{ entry.context or '""' }} {{ entry.match }} {{ entry.level }} {{ entry.prefix }} {{ entry.read or 'none' }} {{ entry.write or 'none' }} {{ entry.notify or 'none' }}
 {%- endfor %}
 
 # Version 1/2c users (read only)
@@ -71,14 +66,14 @@ access {{ entry.name }} {{ entry.context }} {{ entry.match }} {{ entry.level }} 
 
 # Version 3 users (read only)
 {%- for user in conf.get('rousers', []) %}
-rouser {{ user.username }} auth -V {{ user.view }}
-createUser {{ user.username }} {{ user.get('authproto', 'MD5') }} {{ user.passphrase }} {{ user.get('privproto', 'AES') }}
+rouser {{ user.username }} {% if user.get('view') %}{{ user.get('securitylevel', 'auth') }} -V {{ user.view }}{% endif %}
+{% if 'persistentconfig' in snmp  %}# createUser string will be added to {{ snmp.persistentconfig }}{% else %}{{ v3_createUser_string(user) }}{% endif %}
 {%- endfor %}
 
 # Version 3 users (read/write)
 {%- for user in conf.get('rwusers', []) %}
-rwuser {{ user.username }} auth -V {{ user.view }}
-createUser {{ user.username }} {{ user.get('authproto', 'MD5') }} {{ user.passphrase }} {{ user.get('privproto', 'AES') }}
+rwuser {{ user.username }} {% if user.get('view') %}{{ user.get('securitylevel', 'auth') }} -V {{ user.view }}{% endif %}
+{% if 'persistentconfig' in snmp %}# createUser string will be added to {{ snmp.persistentconfig }}{% else %}{{ v3_createUser_string(user) }}{% endif %}
 {%- endfor %}
 
 # Extra settings
