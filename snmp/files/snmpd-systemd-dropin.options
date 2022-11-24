@@ -1,0 +1,16 @@
+# DO NOT EDIT
+#
+# This file is managed by Salt via {{ source }}
+# Modify the config that generates this file instead
+#
+{%- from "snmp/map.jinja" import snmp with context %}
+
+[Service]
+{%- if snmp.mibs is not none %}
+Environment="MIBS='{{ snmp.mibs }}'"
+{%- endif %}
+
+{%- if snmp.snmpdargs is not none %}
+ExecStart=
+ExecStart=/usr/sbin/snmpd {{ snmp.snmpdargs }}
+{%- endif %}
