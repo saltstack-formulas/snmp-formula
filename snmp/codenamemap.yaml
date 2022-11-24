@@ -11,3 +11,36 @@ stretch:
   optionstrap: /etc/systemd/system/snmptrapd.service
   sourceoptions: salt://snmp/files/snmpd-systemd.options
   sourceoptionstrap: salt://snmp/files/snmptrapd-systemd.options
+
+buster:
+  # use the default OS parameters except for -LS6d (which was -Lsd)
+  # yamllint disable-line rule:line-length
+  snmpdargs: -LS6d -Lf /dev/null -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f
+  # the value null means that the default OS parameters should be used
+  trapdargs: null
+  options: /etc/systemd/system/snmpd.service.d/10-snmpd.conf
+  optionstrap: /etc/systemd/system/snmptrapd.service.d/10-snmptrapd.conf
+  sourceoptions: salt://snmp/files/snmpd-systemd-dropin.options
+  sourceoptionstrap: salt://snmp/files/snmptrapd-systemd-dropin.options
+
+bullseye:
+  # use the default OS parameters except for -LS6d (which was -Lsd)
+  # yamllint disable-line rule:line-length
+  snmpdargs: -LS6d -Lf /dev/null -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f
+  # the value null means that the default OS parameters should be used
+  trapdargs: null
+  options: /etc/systemd/system/snmpd.service.d/10-snmpd.conf
+  optionstrap: /etc/systemd/system/snmptrapd.service.d/10-snmptrapd.conf
+  sourceoptions: salt://snmp/files/snmpd-systemd-dropin.options
+  sourceoptionstrap: salt://snmp/files/snmptrapd-systemd-dropin.options
+
+bookworm:
+  # use the default OS parameters except for -LS6d (which was -Lsd)
+  # yamllint disable-line rule:line-length
+  snmpdargs: -LS6d -Lf /dev/null -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f
+  # the value null means that the default OS parameters should be used
+  trapdargs: null
+  options: /etc/systemd/system/snmpd.service.d/10-snmpd.conf
+  optionstrap: /etc/systemd/system/snmptrapd.service.d/10-snmptrapd.conf
+  sourceoptions: salt://snmp/files/snmpd-systemd-dropin.options
+  sourceoptionstrap: salt://snmp/files/snmptrapd-systemd-dropin.options

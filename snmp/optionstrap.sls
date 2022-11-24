@@ -11,5 +11,6 @@ trap_options:
     - user: root
     - group: root
     - mode: 644
+    - makedirs: True
     - watch_in:
       - service: {{ snmp.servicetrap }}
