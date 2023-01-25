@@ -132,3 +132,6 @@ top.sls
 # `suricata-formula` -- Platform binaries
 *.rpm
 *.deb
+
+# macOS
+.DS_Store
